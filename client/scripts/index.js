@@ -37,13 +37,15 @@ var App = React.createClass({
 
 var routes = {
 	Home: require('../routes/Home'),
-	About: require('../routes/About')
+	About: require('../routes/About'),
+	ViewDog: require('../routes/ViewDog'),
 };
 
 var routes = (
 	<Router.Route name="app" path="/" handler={App}>
 		<Router.Route name="home" path="/" handler={routes.Home}/>
 		<Router.Route name="about" path="/about" handler={routes.About}/>
+		<Router.Route name="viewDog" path="/viewDog/:id/:name" handler={routes.ViewDog}/>
 		<Router.DefaultRoute handler={routes.Home}/>
 	</Router.Route>
 );

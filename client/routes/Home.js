@@ -1,4 +1,5 @@
-var React = require('react');
+var React = require('react'),
+	Router = require('react-router');
 
 var Home = React.createClass({
 	componentWillMount: function(){
@@ -37,6 +38,7 @@ var Dog = React.createClass({
 				<h3>{this.props.details.name}</h3>
 				<div><img className="col-xs-12" src={this.props.details.imageUrl} /></div>
 				<div>{this.props.details.breed}</div>
+				<Router.Link to={"/viewDog/" + this.props.details.id + "/" + this.props.details.name}>View Dog</Router.Link>
 			</div>;
 	}
 });
