@@ -40,11 +40,13 @@ app.use('/js', browserify('./client/scripts', {
 
 app.get('/api/dogs', function(req, res){
 	res.send([{
+		id: 1,
 		name: "Theo",
 		dateOfBirth: "29th January 2015",
 		breed: "Jack Russel Cross",
 		imageUrl: "https://lh3.googleusercontent.com/ztLTQB_hHv48-JGNw-sn2IK8KcrvqRGYdRa9a2JleVQHEQiXomKK6d_e4BbXhTtfrfO41xOnVevtD0okVU7Wx61MGMeUp9jMYbTR1j-6RbDKXHHb9HZMMY2LiPXEw4yB0fy_6Xoyr02-2qFJ4jAv7bclNGZ6PayRqYV8tii88XdLHGcSvi3ZIBisuV8KnNCIwoOzO0h-3IvrPl1RnCc0aC2O_o4Vr3vAwmYbvTWzXx_AetgStoOdrcFf5xuKypqJAo8B2A_6a5BHGHZMzhGsMuF2A306Eydse0MHt-JNJcKZnn_Ui844ZEfS1JW5Y8Rrk18iSSRQi_eOJz6s6qhwwSfBz6_PbmlKevnc8trv0orACbyTII5eek0qsoKL-2HSmWyMLAocJoiu9y8tSHOPloILuif6tQzrV1o0_GnqhCiu-mlThvmrWcLmK1nLKinnbKL1kyxtg9jda5KnfTxvtCI12QHe_svkdmc5m3SqPP8xsLZhVW461hEGxqjJ1ILJW96MkVeYYfdYHh1opCD2eYTkzgpWRtfBQZt7ziy7NCTCn_iWGqhClGzRoW79ge7W1Xf-pzmZ1C6lBBrcn26_dqr8oCcxbg5BgdY_znNHmc20N-hgRqSGd1Ys23I47KQX-eLswYcUwdC7q4yydtUmFWrmLk5wHESoQrgKmfehCy_NHw=w982-h737-no",
 	},{
+		id: 2,
 		name: "Luna",
 		dateOfBirth: "30th April 2014",
 		breed: "Romanian Mix",

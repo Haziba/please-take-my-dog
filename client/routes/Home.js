@@ -23,7 +23,7 @@ var Home = React.createClass({
 
 		if(this.state && this.state.dogs && this.state.dogs.length > 0){
 			dogs = 	<div>
-					{this.state.dogs.map(function(dog){ return <Dog details={dog} key={dog.name} /> })}
+					{this.state.dogs.map(function(dog){ return <Dog details={dog} key={dog.id} /> })}
 				</div>;
 		}
 
