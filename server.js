@@ -38,6 +38,8 @@ app.use('/js', browserify('./client/scripts', {
 	here before the catch-all route for index.html below.
 */
 
+var db = require('./db.js');//(app);
+
 app.get('/api/dogs', function(req, res){
 	res.send([{
 		id: 1,
@@ -61,6 +63,6 @@ app.get('*', function(req, res) {
 });
 
 // start the server
-var server = app.listen(process.env.PORT || 3000, function() {
+var server = app.listen(process.env.PORT || 3001, function() {
 	console.log('\nServer ready on port %d\n', server.address().port);
 });
