@@ -70,3 +70,13 @@ var doUpdate = function(updatesToDo){
 
 var client = connect();
 setupVersion(client);
+
+module.exports = {
+	all: function(table){
+		return new Promise(function(success, failure){
+			client.query("select * from " + table).then(function(data){
+				success(data.rows);
+			});
+		});
+	}
+};
