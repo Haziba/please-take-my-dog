@@ -5,7 +5,10 @@ var connect = function(){
 	const connectionDetails = process.env.DATABASE_URL || {port: process.env.DATABASE_URL || 5432, database: "postgres", user: "postgres"};
 
 	const client = new pg.Client(connectionDetails);
-	client.connect();
+	
+	client.connect().catch(function(err){ 
+		console.log("Failed to connect", err); 
+	});
 
 	return client;
 }
