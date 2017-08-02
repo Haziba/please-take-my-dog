@@ -81,5 +81,13 @@ module.exports = {
 				success(data.rows);
 			});
 		});
+	},
+
+	get: function(table, id){
+		return new Promise(function(success, failure){
+			client.query("select * from " + table + " where id=" + id).then(function(data){
+				success(data.rows[0]);
+			});
+		});
 	}
 };

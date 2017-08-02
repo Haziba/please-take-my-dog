@@ -49,6 +49,15 @@ app.get('/api/dogs', function(req, res){
 	});
 });
 
+app.get('/api/dog/:dogId', function(req, res){
+	db.get("dogs", req.params.dogId).then(function(dog){
+		res.send(dog);
+	}).catch(function(err){
+		console.log("Failed to get dog `" + req.params.dogId + "`", err);
+		res.status(500).send("Failed to get dog `" + req.params.dogId + "`");
+	});
+});
+
 app.get('*', function(req, res) {
 	// this route will respond to all requests with the contents of your index
 	// template. Doing this allows react-router to render the view in the app.
