@@ -62,11 +62,20 @@ app.get('/api/dog/:dogId', function(req, res){
 	});
 });
 
-app.post('/api/auth', function(req, res){
+app.post('/api/auth/check', function(req, res){
 	var ticket = req.body.ticket;
 
-	db.validateAuthTicket(ticket).then(function(){
-		res.send({success: true});
+	db.validateAuthTicket(ticket).then(function(carer){
+		res.send({success: true, carer: carer});
+	}).catch(function(){
+		res.send({success: false});
+	});
+});
+
+app.post('/api/auth/login', function(req, res){
+	console.log("get req body", req.body);
+	db.validateAuthLogin(req.body).then(function(carer){
+		res.send({success: true, carer: carer});
 	}).catch(function(){
 		res.send({success: false});
 	});

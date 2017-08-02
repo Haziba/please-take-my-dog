@@ -12,12 +12,32 @@ var Header = React.createClass({
 });
 
 var PageNav = React.createClass({
+	componentWillMount: function(){
+		var that = this;
+
+		Auth.then(function(authed){
+			that.setState({authed: authed});
+		});
+	},
+
 	render: function() {
+		var login;
+
+		if(this.state){
+			if(!this.state.authed){
+				login = <Router.Link to="login">Login</Router.Link>;
+			} else {
+				login = <span>Logout</span>;
+			}
+		}
+
 		return (
 			<div className="nav">
 				<Router.Link to="home">Home</Router.Link>
 				&nbsp; | &nbsp;
 				<Router.Link to="about">About</Router.Link>
+				&nbsp; | &nbsp;
+				{login}
 			</div>
 		);
 	}
@@ -41,12 +61,12 @@ var Auth = (function(){
 
 	return new Promise(function(success, failure){
 		if(authTicket){
-			$.post("/api/auth", { ticket: authTicket }, function(result){
+			$.post("/api/auth/check", { ticket: authTicket }, function(result){
 				if(!result.success){
 					$.cookie("auth", "");
 				}
 
-				success(result.success);
+				success(result);
 			});
 		} else {
 			success(false);
@@ -58,6 +78,7 @@ var routes = {
 	Home: require('../routes/Home'),
 	About: require('../routes/About'),
 	ViewDog: require('../routes/ViewDog'),
+	Login: require('../routes/Login'),
 };
 
 var routes = (
@@ -65,6 +86,7 @@ var routes = (
 		<Router.Route name="home" path="/" handler={routes.Home}/>
 		<Router.Route name="about" path="/about" handler={routes.About}/>
 		<Router.Route name="viewDog" path="/viewDog/:id/:name" handler={routes.ViewDog}/>
+		<Router.Route name="login" path="/login" handler={routes.Login}/>
 		<Router.DefaultRoute handler={routes.Home}/>
 	</Router.Route>
 );

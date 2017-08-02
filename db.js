@@ -97,12 +97,27 @@ module.exports = {
 		return new Promise(function(success, failure){
 			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'").then(function(data){
 				if(data.rows.length > 0){
-					success();
+					success(data.rows[0]);
 				} else {
 					failure();
 				}
 			}).catch(function(err){
 				console.log("Failed to validate auth ticket", err);
+				failure();
+			});
+		});
+	},
+
+	validateAuthLogin: function(authDetails){
+		return new Promise(function(success, failure){
+			client.query("select * from carer where email='" + authDetails.email + "' and pass='" + authDetails.pass + "'").then(function(data){
+				if(data.rows.length > 0){
+					success(data.rows[0]);
+				} else {
+					failure();
+				}
+			}).catch(function(err){
+				console.log("Failed to validate auth login", err);
 				failure();
 			});
 		});
