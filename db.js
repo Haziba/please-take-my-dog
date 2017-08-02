@@ -89,5 +89,22 @@ module.exports = {
 				success(data.rows[0]);
 			});
 		});
+	},
+
+	validateAuthTicket: function(authTicket){
+		var authDetails = authTicket.split(':');
+
+		return new Promise(function(success, failure){
+			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'").then(function(data){
+				if(data.rows.length > 0){
+					success();
+				} else {
+					failure();
+				}
+			}).catch(function(err){
+				console.log("Failed to validate auth ticket", err);
+				failure();
+			});
+		});
 	}
 };

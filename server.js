@@ -3,10 +3,14 @@ var babelify = require('babelify');
 var browserify = require('browserify-middleware');
 var less = require('less-middleware');
 var nunjucks = require('nunjucks');
+var bodyParser = require('body-parser');
 var config = require('./client/config');
 
 // initialise express
 var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // use nunjucks to process view templates in express
 nunjucks.configure('server/templates/views', {
@@ -55,6 +59,16 @@ app.get('/api/dog/:dogId', function(req, res){
 	}).catch(function(err){
 		console.log("Failed to get dog `" + req.params.dogId + "`", err);
 		res.status(500).send("Failed to get dog `" + req.params.dogId + "`");
+	});
+});
+
+app.post('/api/auth', function(req, res){
+	var ticket = req.body.ticket;
+
+	db.validateAuthTicket(ticket).then(function(){
+		res.send({success: true});
+	}).catch(function(){
+		res.send({success: false});
 	});
 });
 

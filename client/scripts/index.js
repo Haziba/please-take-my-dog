@@ -35,6 +35,25 @@ var App = React.createClass({
 	}
 });
 
+var Auth = (function(){
+	var authTicket = $.cookie("auth");
+	var loggedIn = false;
+
+	return new Promise(function(success, failure){
+		if(authTicket){
+			$.post("/api/auth", { ticket: authTicket }, function(result){
+				if(!result.success){
+					$.cookie("auth", "");
+				}
+
+				success(result.success);
+			});
+		} else {
+			success(false);
+		}
+	});
+})();
+
 var routes = {
 	Home: require('../routes/Home'),
 	About: require('../routes/About'),
