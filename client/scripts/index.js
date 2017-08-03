@@ -15,7 +15,7 @@ var PageNav = React.createClass({
 	componentWillMount: function(){
 		var that = this;
 
-		Auth.then(function(authed){
+		window.Auth.then(function(authed){
 			that.setState({authed: authed});
 		});
 	},
@@ -27,7 +27,7 @@ var PageNav = React.createClass({
 			if(!this.state.authed){
 				login = <Router.Link to="login">Login</Router.Link>;
 			} else {
-				login = <span>Logout</span>;
+				login = <Router.Link to="myAccount">My Account</Router.Link>;
 			}
 		}
 
@@ -55,7 +55,7 @@ var App = React.createClass({
 	}
 });
 
-var Auth = (function(){
+window.Auth = (function(){
 	var authTicket = $.cookie("auth");
 	var loggedIn = false;
 
@@ -79,6 +79,7 @@ var routes = {
 	About: require('../routes/About'),
 	ViewDog: require('../routes/ViewDog'),
 	Login: require('../routes/Login'),
+	MyAccount: require('../routes/MyAccount'),
 };
 
 var routes = (
@@ -87,6 +88,7 @@ var routes = (
 		<Router.Route name="about" path="/about" handler={routes.About}/>
 		<Router.Route name="viewDog" path="/viewDog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="login" path="/login" handler={routes.Login}/>
+		<Router.Route name="myAccount" path="/myAccount" handler={routes.MyAccount}/>
 		<Router.DefaultRoute handler={routes.Home}/>
 	</Router.Route>
 );
