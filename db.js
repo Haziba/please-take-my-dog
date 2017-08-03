@@ -117,6 +117,25 @@ module.exports = {
 		});
 	},
 
+	insert: function(table, obj){
+		return new Promise(function(success, failure){
+			var cols = [];
+			var vals = [];
+			
+			for(var prop in obj){
+				cols.push(prop);
+				vals.push("'" + obj[prop] + "'");
+			}
+
+			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + vals.join(",") + ")").then(function(data){
+				success();
+			}).catch(function(err){
+				console.log("Failed to insert dog", err);
+				failure();
+			});
+		});
+	},
+
 	validateAuthTicket: function(authTicket){
 		var authDetails = authTicket.split(':');
 

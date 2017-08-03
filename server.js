@@ -71,6 +71,15 @@ app.get('/api/dog/:dogId', function(req, res){
 	});
 });
 
+app.post('/api/dogs/add', function(req, res){
+	db.insert('dogs', req.body).then(function(result){
+		res.send({success: true});
+	}).catch(function(errO){
+		console.log("Failed to insert dog `" + req.body + "`", err);
+		res.status(500).send("Failed to insert dog `" + req.body + "`");
+	});
+});
+
 app.post('/api/auth/check', function(req, res){
 	var ticket = req.body.ticket;
 
