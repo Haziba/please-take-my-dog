@@ -42,7 +42,7 @@ app.use('/js', browserify('./client/scripts', {
 	here before the catch-all route for index.html below.
 */
 
-var db = require('./db.js');//(app);
+var db = require('./db.js');
 
 app.get('/api/dogs', function(req, res){
 	db.all("dogs").then(function(dogs){

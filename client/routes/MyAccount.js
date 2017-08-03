@@ -1,7 +1,7 @@
 var React = require('react');
 
 var MyAccount = React.createClass({
-	getInitialState(){
+	getInitialState: function(){
 		return { loaded: false };
 	},
 
