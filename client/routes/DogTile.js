@@ -7,7 +7,7 @@ var DogTile = React.createClass({
 				<h3>{this.props.details.name}</h3>
 				<div><img className="col-xs-12" src={this.props.details.imageurl} /></div>
 				<div>{this.props.details.breed}</div>
-				<Router.Link to={"/viewDog/" + this.props.details.id + "/" + this.props.details.name}>View Dog</Router.Link>
+				<Router.Link to={"/dogs/" + this.props.details.id + "/" + this.props.details.name}>View Dog</Router.Link>
 			</div>;
 	}
 });
