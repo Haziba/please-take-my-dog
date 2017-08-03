@@ -1,5 +1,5 @@
-var React = require('react'),
-	Router = require('react-router');
+var 	React = require('react'),
+	DogTile = require('./DogTile.js');
 
 var Home = React.createClass({
 	componentWillMount: function(){
@@ -24,22 +24,11 @@ var Home = React.createClass({
 
 		if(this.state && this.state.dogs && this.state.dogs.length > 0){
 			dogs = 	<div>
-					{this.state.dogs.map(function(dog){ return <Dog details={dog} key={dog.id} /> })}
+					{this.state.dogs.map(function(dog){ return <DogTile details={dog} key={dog.id} /> })}
 				</div>;
 		}
 
 		return dogs;
-	}
-});
-
-var Dog = React.createClass({
-	render: function(){
-		return 	<div className="col-xs-6 col-sm-4 col-md-3">
-				<h3>{this.props.details.name}</h3>
-				<div><img className="col-xs-12" src={this.props.details.imageurl} /></div>
-				<div>{this.props.details.breed}</div>
-				<Router.Link to={"/viewDog/" + this.props.details.id + "/" + this.props.details.name}>View Dog</Router.Link>
-			</div>;
 	}
 });
 
