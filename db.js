@@ -71,6 +71,18 @@ var doUpdate = function(updatesToDo){
 	});
 }
 
+var parseRow = function(row){
+	for(let prop in row){
+		switch(typeof row[prop]){
+			case "string":
+				row[prop] = row[prop].trim();
+				break;
+		}
+	}
+
+	return row;
+}
+
 var client = connect();
 setupVersion(client);
 
@@ -78,7 +90,9 @@ module.exports = {
 	all: function(table){
 		return new Promise(function(success, failure){
 			client.query("select * from " + table).then(function(data){
-				success(data.rows);
+				var rows = data.rows.map((row) => parseRow(row));
+
+				success(rows);
 			});
 		});
 	},
@@ -86,7 +100,9 @@ module.exports = {
 	get: function(table, id){
 		return new Promise(function(success, failure){
 			client.query("select * from " + table + " where id=" + id).then(function(data){
-				success(data.rows[0]);
+				var row = parseRow(data.rows[0]);
+
+				success(row);
 			});
 		});
 	},
@@ -97,7 +113,9 @@ module.exports = {
 		return new Promise(function(success, failure){
 			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'").then(function(data){
 				if(data.rows.length > 0){
-					success(data.rows[0]);
+					var row = parseRow(data.rows[0]);
+
+					success(row);
 				} else {
 					failure();
 				}
@@ -112,7 +130,9 @@ module.exports = {
 		return new Promise(function(success, failure){
 			client.query("select * from carer where email='" + authDetails.email + "' and pass='" + authDetails.pass + "'").then(function(data){
 				if(data.rows.length > 0){
-					success(data.rows[0]);
+					var row = parseRow(data.rows[0]);
+
+					success(row);
 				} else {
 					failure();
 				}
