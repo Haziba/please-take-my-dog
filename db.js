@@ -107,6 +107,16 @@ module.exports = {
 		});
 	},
 
+	getByParent: function(table, parent, parentId){
+		return new Promise(function(success, failure){
+			client.query("select * from " + table + " where " + parent + "id=" + parentId).then(function(data){
+				var rows = data.rows.map((row) => parseRow(row));
+
+				success(rows);
+			});
+		});
+	},
+
 	validateAuthTicket: function(authTicket){
 		var authDetails = authTicket.split(':');
 

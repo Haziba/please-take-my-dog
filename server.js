@@ -53,6 +53,15 @@ app.get('/api/dogs', function(req, res){
 	});
 });
 
+app.get('/api/dogs/:carerId', function(req, res){
+	db.getByParent("dogs", "carer", req.params.carerId).then(function(dogs){
+		res.send(dogs);
+	}).catch(function(err){
+		console.log("Failed to get dogs for carer `" + req.params.carerId + "`");
+		res.status(500).send("Failed to get dogs for carer `" + req.params.carerId + "`");
+	});
+});
+
 app.get('/api/dog/:dogId', function(req, res){
 	db.get("dogs", req.params.dogId).then(function(dog){
 		res.send(dog);
