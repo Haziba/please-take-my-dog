@@ -1,4 +1,5 @@
 var React = require('react'),
+	Router = require('react-router'),
 	DogTile = require('./DogTile.js');
 
 var MyAccount = React.createClass({
@@ -55,9 +56,18 @@ var MyDogs = React.createClass({
 		}
 
 		return 	<div>
-				<p>You have {this.state.dogs.length} dogs</p>
-				{this.state.dogs.map(function(dog){ return <DogTile details={dog} key={dog.id} /> })}
-			</div>
+				<div className="row">
+					<div className="col-xs-6">
+						<p>You have {this.state.dogs.length} dogs</p>
+					</div>
+					<div className="col-xs-6 text-right">
+						<Router.Link to={"/dogs/add" }>Add Dog</Router.Link>
+					</div>
+				</div>
+				<div className="row">
+					{this.state.dogs.map(function(dog){ return <DogTile details={dog} key={dog.id} /> })}
+				</div>
+			</div>;
 	}
 });
 
