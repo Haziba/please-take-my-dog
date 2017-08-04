@@ -15,8 +15,8 @@ var PageNav = React.createClass({
 	componentWillMount: function(){
 		var that = this;
 
-		window.Auth.then(function(authed){
-			that.setState({authed: authed});
+		window.Auth.then(function(result){
+			that.setState(result);
 		});
 	},
 
@@ -24,10 +24,11 @@ var PageNav = React.createClass({
 		var login;
 
 		if(this.state){
-			if(!this.state.authed){
+			//todo: Change {success: true, ...} to {authed: true, ...}
+			if(!this.state.success){
 				login = <Router.Link to="login">Login</Router.Link>;
 			} else {
-				login = <Router.Link to="myAccount">My Account</Router.Link>;
+				login = <Router.Link to={"/carers/" + this.state.carer.id}>My Account</Router.Link>
 			}
 		}
 
@@ -80,7 +81,7 @@ var routes = {
 	ViewDog: require('../routes/dogs/View'),
 	AddDog: require('../routes/dogs/Add'),
 	Login: require('../routes/Login'),
-	MyAccount: require('../routes/MyAccount'),
+	ViewCarer: require('../routes/carers/View'),
 };
 
 var routes = (
@@ -91,8 +92,9 @@ var routes = (
 		<Router.Route name="viewDog" path="/dog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="addDog" path="/dogs/add" handler={routes.AddDog}/>
 
+		<Router.Route name="viewCarer" path="/carers/:id" handler={routes.ViewCarer}/>
+
 		<Router.Route name="login" path="/login" handler={routes.Login}/>
-		<Router.Route name="myAccount" path="/myAccount" handler={routes.MyAccount}/>
 
 		<Router.DefaultRoute handler={routes.Home}/>
 	</Router.Route>

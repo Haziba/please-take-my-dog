@@ -1,8 +1,8 @@
 var React = require('react'),
 	Router = require('react-router'),
-	DogTile = require('./DogTile.js');
+	DogTile = require('../DogTile.js');
 
-var MyAccount = React.createClass({
+var ViewCarer = React.createClass({
 	getInitialState: function(){
 		return { loaded: false };
 	},
@@ -29,12 +29,12 @@ var MyAccount = React.createClass({
 
 		return 	<div>
 				<p>{this.state.carer.name}'s Account</p>
-				<MyDogs carerId={this.state.carer.id} key={this.state.carer.id}/>
+				<DogGrid carerId={this.state.carer.id} key={this.state.carer.id}/>
 			</div>;
 	}
 });
 
-var MyDogs = React.createClass({
+var DogGrid = React.createClass({
 	getInitialState: function(){
 		return { loaded: false };
 	},
@@ -43,7 +43,6 @@ var MyDogs = React.createClass({
 		var that = this;
 
 		$.get("/api/dogs/" + this.props.carerId, function(data){
-			console.log("Got dogs");
 			that.setState({loaded: true, dogs: data});
 		});
 	},
@@ -71,4 +70,4 @@ var MyDogs = React.createClass({
 	}
 });
 
-module.exports = MyAccount;
+module.exports = ViewCarer;
