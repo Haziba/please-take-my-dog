@@ -1,6 +1,5 @@
-var React = require('react'),
-	Router = require('react-router'),
-	DogTile = require('../DogTile.js');
+var 	React 	= require('react'),
+	DogGrid = require('../../components/DogGrid.js');
 
 var ViewCarer = React.createClass({
 	getInitialState: function(){
@@ -29,43 +28,8 @@ var ViewCarer = React.createClass({
 
 		return 	<div>
 				<p>{this.state.carer.name}'s Account</p>
-				<DogGrid carerId={this.state.carer.id} key={this.state.carer.id}/>
-			</div>;
-	}
-});
 
-var DogGrid = React.createClass({
-	getInitialState: function(){
-		return { loaded: false };
-	},
-
-	componentWillMount: function(){
-		var that = this;
-
-		$.get("/api/dogs/" + this.props.carerId, function(data){
-			that.setState({loaded: true, dogs: data});
-		});
-	},
-
-	render: function(){
-		if(!this.state.loaded){
-			return (
-				<p>Loading dogs...</p>
-			);
-		}
-
-		return 	<div>
-				<div className="row">
-					<div className="col-xs-6">
-						<p>You have {this.state.dogs.length} dogs</p>
-					</div>
-					<div className="col-xs-6 text-right">
-						<Router.Link to={"/dogs/add" }>Add Dog</Router.Link>
-					</div>
-				</div>
-				<div className="row">
-					{this.state.dogs.map(function(dog){ return <DogTile details={dog} key={dog.id} /> })}
-				</div>
+				<DogGrid admin={true} carerId={this.state.carer.id} key={this.state.carer.id}/>
 			</div>;
 	}
 });
