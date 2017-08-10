@@ -47,13 +47,15 @@ var Login = React.createClass({
 
 		that.setState({ loggingIn: true });
 
-		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, function(result){
+		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, (result) => {
 			if(result.success){
 				var authTicket = $.cookie("auth", result.data.email + ":" + result.data.pass);
 				location = "/";
 			} else {
-				that.setState({ loggingIn: false, error: "Failed to log in" });
+				that.setState({ loggingIn: false, error: result.message });
 			}
+		}).catch((result) => {
+				that.setState({ loggingIn: false, error: result.responseJSON.message })
 		});
 	}
 });
