@@ -2,7 +2,7 @@ const fs = require('fs');
 
 var connect = function(){
 	const pg = require('pg');
-	const connectionDetails = process.env.DATABASE_URL || {port: process.env.DATABASE_URL || 5432, database: "postgres", user: "postgres"};
+	const connectionDetails = process.env.DATABASE_URL || {host: '127.0.0.1', port: process.env.DATABASE_URL || 5432, database: "postgres", user: "postgres"};
 
 	const client = new pg.Client(connectionDetails);
 	
