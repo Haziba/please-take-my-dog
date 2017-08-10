@@ -44,32 +44,19 @@ app.use('/js', browserify('./client/scripts', {
 
 var db = require('./db.js');
 
-app.get('/api/dogs', function(req, res){
-	db.all("dogs").then(function(dogs){
-		res.send(dogs);
-	}).catch(function(err){
-		console.log("Failed to get dogs", err);
-		res.status(500).send("Failed to get dogs");
-	});
-});
+var dbResponse = (res, promise, failureMessage) => {
+	promise	.then((data) => dbSuccess(res, data))
+		.catch((err) => dbFailure(res, failureMessage, err));
+};
 
-app.get('/api/dogs/:carerId', function(req, res){
-	db.getByParent("dogs", "carer", req.params.carerId).then(function(dogs){
-		res.send(dogs);
-	}).catch(function(err){
-		console.log("Failed to get dogs for carer `" + req.params.carerId + "`");
-		res.status(500).send("Failed to get dogs for carer `" + req.params.carerId + "`");
-	});
-});
+var dbSuccess = (res, data) => {
+	res.send({success: true, data: data});
+};
 
-app.get('/api/dog/:dogId', function(req, res){
-	db.get("dogs", req.params.dogId).then(function(dog){
-		res.send(dog);
-	}).catch(function(err){
-		console.log("Failed to get dog `" + req.params.dogId + "`", err);
-		res.status(500).send("Failed to get dog `" + req.params.dogId + "`");
-	});
-});
+var dbFailure = (res, failureMessage, err) => {
+	console.log(failureMessage, err);
+	res.status(500).send({success: false, message: failureMessage});
+};
 
 app.post('/api/dogs/add', function(req, res){
 	db.insert('dogs', req.body).then(function(result){
@@ -99,10 +86,12 @@ app.post('/api/auth/login', function(req, res){
 	});
 });
 
-app.get('*', function(req, res) {
-	// this route will respond to all requests with the contents of your index
-	// template. Doing this allows react-router to render the view in the app.
-    res.render('index.html');
+app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(req.body), "Failed to authenticate user `" + rep.body.email + "`"));
+
+app.post('/api/auth/register', (req, res) => {
+	db.isEmailAvailable(req.body.email)
+		.then(() => dbResponse(res, db.insert("carer", req.body), "Failed to create account"))
+		.catch((err) => dbFailure(res, "Email address in use", err));
 });
 
 // start the server

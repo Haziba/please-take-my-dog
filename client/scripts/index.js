@@ -24,11 +24,18 @@ var PageNav = React.createClass({
 		var login;
 
 		if(this.state){
-			//todo: Change {success: true, ...} to {authed: true, ...}
-			if(!this.state.success){
-				login = <Router.Link to="login">Login</Router.Link>;
+			if(!this.state.authed){
+				login = <div>
+						&nbsp; | &nbsp;
+						<Router.Link to="login">Login</Router.Link>
+						&nbsp; | &nbsp;
+						<Router.Link to="register">Register</Router.Link>
+					</div>;
 			} else {
-				login = <Router.Link to={"/carers/" + this.state.carer.id}>My Account</Router.Link>
+				login = <div>
+						&nbsp; | &nbsp;
+						<Router.Link to={"/carer/" + this.state.carer.id}>My Account</Router.Link>
+					</div>;
 			}
 		}
 
@@ -37,7 +44,6 @@ var PageNav = React.createClass({
 				<Router.Link to="home">Home</Router.Link>
 				&nbsp; | &nbsp;
 				<Router.Link to="about">About</Router.Link>
-				&nbsp; | &nbsp;
 				{login}
 			</div>
 		);
@@ -81,6 +87,7 @@ var routes = {
 	ViewDog: require('../routes/dogs/View'),
 	AddDog: require('../routes/dogs/Add'),
 	Login: require('../routes/Login'),
+	Register: require('../routes/Register'),
 	ViewCarer: require('../routes/carers/View'),
 };
 
@@ -92,9 +99,10 @@ var routes = (
 		<Router.Route name="viewDog" path="/dog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="addDog" path="/dogs/add" handler={routes.AddDog}/>
 
-		<Router.Route name="viewCarer" path="/carers/:id" handler={routes.ViewCarer}/>
+		<Router.Route name="viewCarer" path="/carer/:id" handler={routes.ViewCarer}/>
 
 		<Router.Route name="login" path="/login" handler={routes.Login}/>
+		<Router.Route name="register" path="/register" handler={routes.Register}/>
 
 		<Router.DefaultRoute handler={routes.Home}/>
 	</Router.Route>

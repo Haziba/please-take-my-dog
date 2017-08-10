@@ -127,48 +127,64 @@ module.exports = {
 				vals.push("'" + obj[prop] + "'");
 			}
 
-			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + vals.join(",") + ")").then(function(data){
-				success();
-			}).catch(function(err){
-				console.log("Failed to insert dog", err);
+			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + vals.join(",") + ")")
+				.then((data) => success(obj)).catch((err) => {
+					console.log("Failed to insert " + table, err);
+					failure();
+				});
+		});
+	},
+
+	isEmailAvailable: (email) => {
+		return new Promise((success, failure) => {
+			client.query("select * from carer where email='" + email + "'").then((data) => {
+				if(data.rowCount == 0){
+					success();
+				} else {
+					failure();
+				}
+			}).catch((err) => {
+				console.log("Failed to check email availability `" + email + "`");
 				failure();
 			});
 		});
 	},
 
-	validateAuthTicket: function(authTicket){
-		var authDetails = authTicket.split(':');
+	validateAuthTicket: (authTicket) => {
+		let authDetails = authTicket.split(':');
 
-		return new Promise(function(success, failure){
-			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'").then(function(data){
-				if(data.rows.length > 0){
-					var row = parseRow(data.rows[0]);
+		return new Promise((success, failure) => {
+			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'")
+				.then((data) => {
+					if(data.rowCount > 0){
+						let row = parseRow(data.rows[0]);
 
-					success(row);
-				} else {
+						success(row);
+					} else {
+						failure();
+					}
+				}).catch((err) => {
+					console.log("Failed to validate auth ticket", err);
 					failure();
-				}
-			}).catch(function(err){
-				console.log("Failed to validate auth ticket", err);
-				failure();
-			});
+				});
 		});
 	},
 
-	validateAuthLogin: function(authDetails){
-		return new Promise(function(success, failure){
-			client.query("select * from carer where email='" + authDetails.email + "' and pass='" + authDetails.pass + "'").then(function(data){
-				if(data.rows.length > 0){
-					var row = parseRow(data.rows[0]);
+	validateAuthLogin: (authDetails) => {
+		return new Promise((success, failure) => {
+			client.query("select * from carer where email='" + authDetails.email + "' and pass='" + authDetails.pass + "'")
+				.then((data) => {
+					if(data.rows.length > 0){
+						let row = parseRow(data.rows[0]);
 
-					success(row);
-				} else {
+						success(row);
+					} else {
+						failure();
+					}
+				}).catch((err) => {
+					console.log("Failed to validate auth login", err);
 					failure();
-				}
-			}).catch(function(err){
-				console.log("Failed to validate auth login", err);
-				failure();
-			});
+				});
 		});
 	}
 };
