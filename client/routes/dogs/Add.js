@@ -79,7 +79,7 @@ var AddDog = React.createClass({
 			breed: that.state.breed,
 		}, function(result){
 			if(result.success){
-				location = "/myAccount";
+				location = "/carer/" + that.state.carer.id;
 			} else {
 				// todo: Validation
 				console.log("Failed");

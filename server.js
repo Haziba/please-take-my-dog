@@ -58,33 +58,15 @@ var dbFailure = (res, failureMessage, err) => {
 	res.status(500).send({success: false, message: failureMessage});
 };
 
-app.post('/api/dogs/add', function(req, res){
-	db.insert('dogs', req.body).then(function(result){
-		res.send({success: true});
-	}).catch(function(errO){
-		console.log("Failed to insert dog `" + req.body + "`", err);
-		res.status(500).send("Failed to insert dog `" + req.body + "`");
-	});
-});
+app.get('/api/dogs', (req, res) => dbResponse(res, db.all("dogs"), "Failed to get dogs"));
 
-app.post('/api/auth/check', function(req, res){
-	var ticket = req.body.ticket;
+app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, db.getByParent("dogs", "carer", req.params.carerId), "Failed to get dogs for carer `" + req.params.carerId + "`"));
 
-	db.validateAuthTicket(ticket).then(function(carer){
-		res.send({success: true, carer: carer});
-	}).catch(function(){
-		res.send({success: false});
-	});
-});
+app.get('/api/dog/:dogId', (req, res) => dbResponse(res, db.get("dogs", req.params.dogId), "Failed to get dog `" + req.params.dogId + "`"));
 
-app.post('/api/auth/login', function(req, res){
-	console.log("get req body", req.body);
-	db.validateAuthLogin(req.body).then(function(carer){
-		res.send({success: true, carer: carer});
-	}).catch(function(){
-		res.send({success: false});
-	});
-});
+app.post('/api/dogs/add', (req, res) => dbResponse(res, db.insert('dogs', req.body), "Failed to insert dog `" + req.body + "`"));
+
+app.post('/api/auth/check', (req, res) => dbResponse(res, db.validateAuthTicket(req.body.ticket), "Failed to authenticate ticket `" + req.body.ticket + "`"));
 
 app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(req.body), "Failed to authenticate user `" + rep.body.email + "`"));
 
