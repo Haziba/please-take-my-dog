@@ -16,8 +16,8 @@ var DogGrid = React.createClass({
 			url += "/" + this.props.carerId;
 		}
 
-		$.get(url, function(data){
-			that.setState({loaded: true, dogs: data});
+		$.get(url, (result) => {
+			that.setState({loaded: true, dogs: result.data});
 		});
 	},
 

@@ -76,6 +76,8 @@ app.post('/api/auth/register', (req, res) => {
 		.catch((err) => dbFailure(res, "Email address in use", err));
 });
 
+app.get('*', (req, res) => res.render('index.html'));
+
 // start the server
 var server = app.listen(process.env.PORT || 3001, function() {
 	console.log('\nServer ready on port %d\n', server.address().port);
