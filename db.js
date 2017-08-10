@@ -85,6 +85,9 @@ module.exports = {
 					let rows = data.rows.map((row) => parseRow(row));
 
 					success(rows);
+				}).catch((err) => {
+					console.log("Failed to get all table=" + table, err);
+					failure("Server error");
 				});
 		});
 	},
@@ -96,6 +99,9 @@ module.exports = {
 					let row = parseRow(data.rows[0]);
 
 					success(row);
+				}).catch((err) => {
+					console.log("Failed to get table=" + table + ", id=" + id, err);
+					failure("Server error");
 				});
 		});
 	},
@@ -107,6 +113,9 @@ module.exports = {
 					let rows = data.rows.map((row) => parseRow(row));
 
 					success(rows);
+				}).catch((err) => {
+					console.log("Failed to get by parent table=" + table + ", parent=" + parent + ", parentId=", parentId);
+					failure("Server error");
 				});
 		});
 	},
@@ -124,7 +133,10 @@ module.exports = {
 			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + vals.join(",") + ")")
 				.then((data) => success(obj)).catch((err) => {
 					console.log("Failed to insert " + table, err);
-					failure();
+					failure("Insert failed");
+				}).catch((err) => {
+					console.log("Failed to insert into " + table);
+					failure("Server error");
 				});
 		});
 	},
@@ -135,11 +147,11 @@ module.exports = {
 				if(data.rowCount == 0){
 					success();
 				} else {
-					failure();
+					failure("Email is not available");
 				}
 			}).catch((err) => {
 				console.log("Failed to check email availability `" + email + "`");
-				failure();
+				failure("Server error");
 			});
 		});
 	},
@@ -155,11 +167,11 @@ module.exports = {
 
 						success(row);
 					} else {
-						failure();
+						failure("Failed to validate auth ticket");
 					}
 				}).catch((err) => {
-					console.log("Failed to validate auth ticket", err);
-					failure();
+					console.log("Failed to validate auth ticket authDetails", err);
+					failure("Server error");
 				});
 		});
 	},
@@ -173,11 +185,11 @@ module.exports = {
 
 						success(row);
 					} else {
-						failure();
+						failure("No user was found with that email and password");
 					}
 				}).catch((err) => {
-					console.log("Failed to validate auth login", err);
-					failure();
+					console.log("Failed to validate auth login email='" + authDetails.email + "'", err);
+					failure("Server error");
 				});
 		});
 	}
