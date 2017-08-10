@@ -68,7 +68,7 @@ app.post('/api/dogs/add', (req, res) => dbResponse(res, db.insert('dogs', req.bo
 
 app.post('/api/auth/check', (req, res) => dbResponse(res, db.validateAuthTicket(req.body.ticket), "Failed to authenticate ticket `" + req.body.ticket + "`"));
 
-app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(req.body), "Failed to authenticate user `" + rep.body.email + "`"));
+app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(req.body), "Failed to authenticate user `" + req.body.email + "`"));
 
 app.post('/api/auth/register', (req, res) => {
 	db.isEmailAvailable(req.body.email)
