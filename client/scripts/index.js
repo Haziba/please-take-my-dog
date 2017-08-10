@@ -73,10 +73,10 @@ window.Auth = (function(){
 					$.cookie("auth", "");
 				}
 
-				success(result);
+				success({ authed: result.success, carer: result.data });
 			});
 		} else {
-			success(false);
+			success({ authed: false });
 		}
 	});
 })();

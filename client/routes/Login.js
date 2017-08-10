@@ -49,7 +49,7 @@ var Login = React.createClass({
 
 		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, function(result){
 			if(result.success){
-				var authTicket = $.cookie("auth", result.carer.email + ":" + result.carer.pass);
+				var authTicket = $.cookie("auth", result.data.email + ":" + result.data.pass);
 				location = "/";
 			} else {
 				that.setState({ loggingIn: false, error: "Failed to log in" });

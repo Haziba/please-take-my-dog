@@ -10,7 +10,7 @@ var ViewCarer = React.createClass({
 		var that = this;
 
 		window.Auth.then(function(result){
-			if(!result.success){
+			if(!result.authed){
 				location = "/";
 				return;
 			}
