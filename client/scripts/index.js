@@ -25,14 +25,14 @@ var PageNav = React.createClass({
 
 		if(this.state){
 			if(!this.state.authed){
-				login = <div>
+				login = <div className="inline">
 						&nbsp; | &nbsp;
 						<Router.Link to="login">Login</Router.Link>
 						&nbsp; | &nbsp;
 						<Router.Link to="register">Register</Router.Link>
 					</div>;
 			} else {
-				login = <div>
+				login = <div className="inline">
 						&nbsp; | &nbsp;
 						<Router.Link to={"/carer/" + this.state.carer.id}>My Account</Router.Link>
 					</div>;
@@ -41,9 +41,11 @@ var PageNav = React.createClass({
 
 		return (
 			<div className="nav">
-				<Router.Link to="home">Home</Router.Link>
-				&nbsp; | &nbsp;
-				<Router.Link to="about">About</Router.Link>
+				<div className="inline">
+					<Router.Link to="home">Home</Router.Link>
+					&nbsp; | &nbsp;
+					<Router.Link to="about">About</Router.Link>
+				</div>
 				{login}
 			</div>
 		);
