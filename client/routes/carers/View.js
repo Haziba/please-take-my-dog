@@ -15,7 +15,13 @@ var ViewCarer = React.createClass({
 				return;
 			}
 
-			that.setState({loaded: true, carer: result.carer});
+			if(that.props.params.id == result.carer.id){
+				that.setState({loaded: true, carer: result.carer, admin: true});
+			} else {
+				$.get('/api/carer/' + that.props.params.id).then((carerResult) => {
+					that.setState({loaded: true, carer: carerResult.data.carer, admin: false});
+				});
+			}
 		});
 	},
 
@@ -29,7 +35,7 @@ var ViewCarer = React.createClass({
 		return 	<div>
 				<p>{this.state.carer.name}'s Account</p>
 
-				<DogGrid admin={true} carerId={this.state.carer.id} key={this.state.carer.id}/>
+				<DogGrid admin={this.state.admin} carerId={this.state.carer.id} key={this.state.carer.id}/>
 			</div>;
 	}
 });

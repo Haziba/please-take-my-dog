@@ -85,6 +85,8 @@ app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dogs", re
 
 app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dogs', req.body)}, "Failed to insert dog `" + req.body + "`"));
 
+app.get('/api/carer/:carerId', (req, res) => dbResponse(res, {carer: db.get("carer", req.params.carerId)}, "Failed to get carer `" + req.params.carerId + "`"));
+
 app.post('/api/auth/check', (req, res) => dbResponse(res, db.validateAuthTicket(req.body.ticket), "Failed to authenticate ticket `" + req.body.ticket + "`"));
 
 app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(req.body), "Failed to authenticate user `" + req.body.email + "`"));
