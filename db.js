@@ -106,7 +106,21 @@ module.exports = {
 		});
 	},
 
-	getByParent: (table, parent, parentId) => {
+	getByChild: (table, child, childId) => {
+		return new Promise((success, failure) => {
+			client.query("select t.* from " + table + " t inner join " + child + " c on c." + table + "id=t.id")
+				.then((data) => {
+					let row = parseRow(data.rows[0]);
+
+					success(row);
+				}).catch((err) => {
+					console.log("Failed to get by child table=" + table + ", child=" + child + ", childId=" + childId, err);
+					failure("Server error");
+				});
+		});
+	},
+
+	allForParent: (table, parent, parentId) => {
 		return new Promise((success, failure) => {
 			client.query("select * from " + table + " where " + parent + "id=" + parentId)
 				.then((data) => {

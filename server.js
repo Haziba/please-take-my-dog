@@ -77,13 +77,13 @@ var dbFailure = (res, failureMessage, err) => {
 	res.status(500).send({success: false, message: failureMessage});
 };
 
-app.get('/api/dogs', (req, res) => dbResponse(res, db.all("dogs"), "Failed to get dogs"));
+app.get('/api/dogs', (req, res) => dbResponse(res, {dogs: db.all("dogs")}, "Failed to get dogs"));
 
-app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, db.getByParent("dogs", "carer", req.params.carerId), "Failed to get dogs for carer `" + req.params.carerId + "`"));
+app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForParent("dogs", "carer", req.params.carerId)}, "Failed to get dogs for carer `" + req.params.carerId + "`"));
 
-app.get('/api/dog/:dogId', (req, res) => dbResponse(res, db.get("dogs", req.params.dogId), "Failed to get dog `" + req.params.dogId + "`"));
+app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dogs", req.params.dogId), carer: db.getByChild("carer", "dogs", req.params.dogId)}, "Failed to get dog `" + req.params.dogId + "`"));
 
-app.post('/api/dogs/add', (req, res) => dbResponse(res, db.insert('dogs', req.body), "Failed to insert dog `" + req.body + "`"));
+app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dogs', req.body)}, "Failed to insert dog `" + req.body + "`"));
 
 app.post('/api/auth/check', (req, res) => dbResponse(res, db.validateAuthTicket(req.body.ticket), "Failed to authenticate ticket `" + req.body.ticket + "`"));
 
@@ -91,7 +91,7 @@ app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(r
 
 app.post('/api/auth/register', (req, res) => {
 	db.isEmailAvailable(req.body.email)
-		.then(() => dbResponse(res, db.insert("carer", req.body), "Failed to create account"))
+		.then(() => dbResponse(res, {carer: db.insert("carer", req.body)}, "Failed to create account"))
 		.catch((err) => dbFailure(res, "Email address in use", err));
 });
 
