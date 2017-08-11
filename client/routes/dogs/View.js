@@ -1,4 +1,5 @@
-var React = require('react');
+var React = require('react'),
+	Router = require('react-router');
 
 var ViewDog = React.createClass({
 	getInitialState: function(){
@@ -9,7 +10,7 @@ var ViewDog = React.createClass({
 		var that = this;
 
 		$.get("/api/dog/" + this.props.params.id).then(function(result){
-			that.setState({ loaded: true, details: result.data.dog });
+			that.setState({ loaded: true, dog: result.data.dog, carer: result.data.carer });
 		});
 	},
 
@@ -19,11 +20,17 @@ var ViewDog = React.createClass({
 		}
 
 		return (
-			<div>
-				<p>{this.state.details.name}</p>
-				<p>Breed: {this.state.details.breed}</p>
-				<p>Size: {this.state.details.size}</p>
-				<img clasName="col-xs-12" src={this.state.details.imageurl} />
+			<div className="row">
+				<div className="col-xs-6">
+					<p>{this.state.dog.name}</p>
+					<p>Breed: {this.state.dog.breed}</p>
+					<p>Size: {this.state.dog.size}</p>
+				</div>
+				<div className="col-xs-6 text-right">
+					<h4>Carer</h4>
+					<Router.Link to={"/carer/" + this.state.carer.id}>{this.state.carer.name}</Router.Link>
+				</div>
+				<img className="col-xs-12" src={this.state.dog.imageurl} />
 			</div>
 		);
 	}
