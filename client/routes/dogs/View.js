@@ -9,7 +9,7 @@ var ViewDog = React.createClass({
 		var that = this;
 
 		$.get("/api/dog/" + this.props.params.id).then(function(result){
-			that.setState({ loaded: true, details: result.data });
+			that.setState({ loaded: true, details: result.data.dog });
 		});
 	},
 

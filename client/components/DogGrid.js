@@ -11,13 +11,13 @@ var DogGrid = React.createClass({
 		var that = this;
 
 		var url = "/api/dogs";
-		
+
 		if(this.props.carerId){
 			url += "/" + this.props.carerId;
 		}
 
 		$.get(url, (result) => {
-			that.setState({loaded: true, dogs: result.data});
+			that.setState({loaded: true, dogs: result.data.dogs});
 		});
 	},
 

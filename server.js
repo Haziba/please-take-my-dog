@@ -44,8 +44,27 @@ app.use('/js', browserify('./client/scripts', {
 
 var db = require('./db.js');
 
-var dbResponse = (res, promise, failureMessage) => {
-	promise	.then((data) => dbSuccess(res, data))
+var dbResponse = (res, dbActions, failureMessage) => {
+  let data, promises = [];
+
+  if(Promise.resolve(dbActions) == dbActions){
+    promises.push(dbActions);
+  } else {
+    data = dbActions;
+
+    for(var action in dbActions){
+      promises.push(dbActions[action]);
+    }
+
+    for(let d in data) {
+      (function(d){
+        data[d].then((resp) => { data[d] = resp })
+      })(d);
+    }
+  }
+
+	Promise.all(promises)
+    .then((resp) => dbSuccess(res, data ? data : resp[0]))
 		.catch((err) => dbFailure(res, failureMessage, err));
 };
 

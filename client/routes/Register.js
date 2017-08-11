@@ -78,7 +78,7 @@ var Register = React.createClass({
 
 		$.post("/api/auth/register", {email: this.state.email, pass: this.state.pass, name: this.state.name}, function(result){
 			if(result.success){
-				var authTicket = $.cookie("auth", result.data.email + ":" + result.data.pass);
+				var authTicket = $.cookie("auth", result.data.carer.email + ":" + result.data.carer.pass);
 				location = "/";
 			} else {
 				that.setState({ registering: false, error: result.message });
