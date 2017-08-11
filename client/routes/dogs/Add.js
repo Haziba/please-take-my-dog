@@ -74,7 +74,7 @@ var AddDog = React.createClass({
 		$.post("/api/dogs/add", {
 			carerId: that.state.carer.id,
 			name: that.state.name,
-		       	size: that.state.size,
+		  size: that.state.size,
 			location: that.state.location,
 			breed: that.state.breed,
 		}, function(result){
