@@ -77,13 +77,13 @@ var dbFailure = (res, failureMessage, err) => {
 	res.status(500).send({success: false, message: failureMessage});
 };
 
-app.get('/api/dogs', (req, res) => dbResponse(res, {dogs: db.all("dogs")}, "Failed to get dogs"));
+app.get('/api/dogs', (req, res) => dbResponse(res, {dogs: db.all("dog")}, "Failed to get dogs"));
 
-app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForParent("dogs", "carer", req.params.carerId)}, "Failed to get dogs for carer `" + req.params.carerId + "`"));
+app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForParent("dog", "carer", req.params.carerId)}, "Failed to get dogs for carer `" + req.params.carerId + "`"));
 
-app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dogs", req.params.dogId), carer: db.getByChild("carer", "dogs", req.params.dogId)}, "Failed to get dog `" + req.params.dogId + "`"));
+app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dog", req.params.dogId), carer: db.getByChild("carer", "dog", req.params.dogId)}, "Failed to get dog `" + req.params.dogId + "`"));
 
-app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dogs', req.body)}, "Failed to insert dog `" + req.body + "`"));
+app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dog', req.body)}, "Failed to insert dog `" + req.body + "`"));
 
 app.get('/api/carer/:carerId', (req, res) => dbResponse(res, {carer: db.get("carer", req.params.carerId)}, "Failed to get carer `" + req.params.carerId + "`"));
 
