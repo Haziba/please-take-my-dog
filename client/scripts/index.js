@@ -88,6 +88,7 @@ var routes = {
 	About: require('../routes/About'),
 	ViewDog: require('../routes/dogs/View'),
 	AddDog: require('../routes/dogs/Add'),
+	DogAddTimeline: require('../routes/dogs/timeline/Add'),
 	Login: require('../routes/Login'),
 	Register: require('../routes/Register'),
 	ViewCarer: require('../routes/carers/View'),
@@ -100,6 +101,8 @@ var routes = (
 
 		<Router.Route name="viewDog" path="/dog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="addDog" path="/dogs/add" handler={routes.AddDog}/>
+
+		<Router.Route name="dogAddTimeline" path="/dogs/:dogId/timeline/add" handler={routes.DogAddTimeline}/>
 
 		<Router.Route name="viewCarer" path="/carer/:id" handler={routes.ViewCarer}/>
 

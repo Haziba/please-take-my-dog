@@ -155,6 +155,25 @@ module.exports = {
 		});
 	},
 
+	update: (table, objId, obj) => {
+		return new Promise((success, failure) => {
+			let sets = [];
+			
+			for(let prop in obj){
+				sets.push(`${prop}='${obj[prop]}'`);
+			}
+
+			client.query("update " + table + " set " + sets.join(', ') + " where id=" + objId)
+				.then((data) => success(obj)).catch((err) => {
+					console.log("Failed to update " + table, err);
+					failure("Update failed");
+				}).catch((err) => {
+					console.log("Failed to update " + table);
+					failure("Server error");
+				});
+		});
+	},
+
 	isEmailAvailable: (email) => {
 		return new Promise((success, failure) => {
 			client.query("select * from carer where email='" + email + "'").then((data) => {

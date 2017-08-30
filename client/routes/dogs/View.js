@@ -1,5 +1,6 @@
 var React = require('react'),
-	Router = require('react-router');
+	Router = require('react-router'),
+	DogTimeline = require('../../components/DogTimeline.js');
 
 var ViewDog = React.createClass({
 	getInitialState: function(){
@@ -10,7 +11,18 @@ var ViewDog = React.createClass({
 		var that = this;
 
 		$.get("/api/dog/" + this.props.params.id).then(function(result){
-			that.setState({ loaded: true, dog: result.data.dog, carer: result.data.carer });
+			let admin;
+			if(that.state.self){
+				admin = that.state.self.id == result.data.dog.carerid;
+			}
+			that.setState({ loaded: true, dog: result.data.dog, carer: result.data.carer, admin: admin });
+		});
+		window.Auth.then((result) => {
+			let admin;
+			if(that.state.dog){
+				admin = that.state.dog.carerid == result.carer.id;
+			}
+			that.setState({ self: result.carer, admin: admin });
 		});
 	},
 
@@ -20,6 +32,7 @@ var ViewDog = React.createClass({
 		}
 
 		return (
+		<div>
 			<div className="row">
 				<div className="col-xs-6">
 					<p>{this.state.dog.name}</p>
@@ -32,6 +45,8 @@ var ViewDog = React.createClass({
 				</div>
 				<img className="col-xs-12" src={this.state.dog.imageurl} />
 			</div>
+			<DogTimeline dog={this.state.dog} admin={this.state.admin} key={this.state.dog.id} />
+		</div>
 		);
 	}
 });
