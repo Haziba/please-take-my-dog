@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var express = require('express');
 var babelify = require('babelify');
 var browserify = require('browserify-middleware');
@@ -37,10 +39,12 @@ app.use('/js', browserify('./client/scripts', {
 	})]
 }));
 
-/*
-	set up any additional server routes (api endpoints, static pages, etc.)
-	here before the catch-all route for index.html below.
-*/
+const cloudinary = require('cloudinary');
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 var db = require('./db.js');
 
@@ -83,7 +87,10 @@ app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForPare
 
 app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dog", req.params.dogId), carer: db.getByChild("carer", "dog", req.params.dogId)}, "Failed to get dog `" + req.params.dogId + "`"));
 
-app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dog', req.body)}, "Failed to insert dog `" + req.body + "`"));
+app.post('/api/dogs/add', (req, res) => {
+	//cloudinary.v2.uploader.upload(
+	return dbResponse(res, {dog: db.insert('dog', req.body)}, "Failed to insert dog `" + req.body + "`");
+});
 
 app.post('/api/dog/:dogId/update', (req, res) => dbResponse(res, {dog: db.update('dog', req.params.dogId, req.body.dog)}, "Failed to update dog `" + req.params.dogId + "`, `" + req.body + "`"));
 
@@ -100,6 +107,9 @@ app.post('/api/auth/register', (req, res) => {
 });
 
 app.get('*', (req, res) => res.render('index.html'));
+
+
+//cloudinary.v2.uploader.upload("./pic.jpg", function(error, result){ console.log(error, result); });
 
 // start the server
 var server = app.listen(process.env.PORT || 3001, function() {

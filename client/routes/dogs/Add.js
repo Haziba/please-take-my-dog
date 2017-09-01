@@ -1,5 +1,8 @@
 var React = require('react');
 
+var cl = cloudinary.Cloudinary.new({ cloud_name: "haziba" });
+cl.init();
+
 var AddDog = React.createClass({
 	getInitialState: function(){
 		return { loaded: false, posting: false, name: "", size: 10, location: "52.00000,-1.00000", breed: null };
@@ -11,6 +14,12 @@ var AddDog = React.createClass({
 		Auth.then(function(result){
 			that.setState({loaded: true, carer: result.carer});
 		});
+	},
+
+	componentDidMount: function(){
+	  if($.fn.cloudinary_fileupload !== undefined) {
+	    $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
+	  }
 	},
 
 	render: function() {
@@ -25,6 +34,8 @@ var AddDog = React.createClass({
 		if(this.state.error){
 			error = <div>{this.state.error}</div>;
 		}
+
+		let pictureUpload = $.cloudinary.unsigned_upload_tag()[0];
 
 		return (
 			<div>
@@ -49,6 +60,11 @@ var AddDog = React.createClass({
 					<label>
 						Breed:
 						<input type="text" name="breed" value={this.state.breed} onChange={this.handleChange} disabled={this.state.posting} />
+					</label>
+					<br />
+					<label>
+						Picture:
+						{pictureUpload}
 					</label>
 					<br />
 					<input type="submit" value="Log In" disabled={this.state.posting} />
