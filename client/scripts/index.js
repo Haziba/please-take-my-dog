@@ -59,7 +59,7 @@ var App = React.createClass({
 		return (
 			<div className="container">
 				<div className="row">
-					<div className="col-xs-12 col-md-10 col-md-offset-1">
+					<main className="col-xs-12 col-md-10 col-md-offset-1">
 						<Header />
 						<PageNav />
 						<div className="row">
@@ -70,7 +70,7 @@ var App = React.createClass({
 								<DogQuickList key="dog-quick-list" />
 							</div>
 						</div>
-					</div>
+					</main>
 				</div>
 			</div>
 		);
