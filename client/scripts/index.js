@@ -59,14 +59,14 @@ var App = React.createClass({
 		return (
 			<div className="container">
 				<div className="row">
-					<div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+					<div className="col-xs-12 col-md-10 col-md-offset-1">
 						<Header />
 						<PageNav />
 						<div className="row">
-							<div className="col-xs-9">
+							<div className="col-xs-12 col-sm-9">
 								<Router.RouteHandler/>
 							</div>
-							<div className="col-xs-3">
+							<div className="col-sm-3 hidden-xs">
 								<DogQuickList key="dog-quick-list" />
 							</div>
 						</div>
