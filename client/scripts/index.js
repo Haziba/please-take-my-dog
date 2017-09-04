@@ -1,5 +1,6 @@
 var React = require('react'),
-	Router = require('react-router');
+	Router = require('react-router'),
+	DogQuickList = require('../components/DogQuickList.js');
 
 var Header = React.createClass({
 	render: function() {
@@ -56,9 +57,20 @@ var App = React.createClass({
 	render: function() {
 		return (
 			<div className="container">
-				<Header />
-				<PageNav />
-				<Router.RouteHandler/>
+				<div className="row">
+					<div className="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2">
+						<Header />
+						<PageNav />
+						<div className="row">
+							<div className="col-xs-9">
+								<Router.RouteHandler/>
+							</div>
+							<div className="col-xs-3">
+								<DogQuickList key="dog-quick-list" />
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		);
 	}
