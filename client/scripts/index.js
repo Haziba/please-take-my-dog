@@ -48,6 +48,7 @@ var PageNav = React.createClass({
 					<Router.Link to="about">About</Router.Link>
 				</div>
 				{login}
+				<hr />
 			</div>
 		);
 	}
