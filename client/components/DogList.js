@@ -5,7 +5,7 @@ var React = require('react'),
 var DogList = React.createClass({
 	render: function(){
 		return 	<div className="row">
-				<h3>{this.props.listName}</h3>
+				<h3 className="col-xs-12">{this.props.listName}</h3>
 				{this.props.dogs.map(function(dog){ return <DogListItem dog={dog} key={`dog-list-item-${dog.id}`} /> })}
 			</div>;
 	}

@@ -30,9 +30,7 @@ var DogQuickList = React.createClass({
 		}
 
 		return 	<div className="dogLists">
-				<div className="row">
-					{dogLists}
-				</div>
+				{dogLists}
 			</div>;
 	}
 });
