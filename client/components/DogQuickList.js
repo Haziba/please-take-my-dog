@@ -1,6 +1,6 @@
 var	React 	= require('react'),
 	Router 	= require('react-router'),
-	DogListItem = require('./DogListItem.js');
+	DogList = require('./DogList.js');
 
 var DogQuickList = React.createClass({
 	getInitialState: function(){
@@ -13,7 +13,7 @@ var DogQuickList = React.createClass({
 		var url = "/api/dogs/quicklist";
 
 		$.get(url, (result) => {
-			that.setState({loaded: true, dogs: result.data.dogs});
+			that.setState({loaded: true, lists: result.data});
 		});
 	},
 
@@ -24,9 +24,14 @@ var DogQuickList = React.createClass({
 			);
 		}
 
-		return 	<div>
+		var dogLists = [];
+		for(let dogListName in this.state.lists){
+			dogLists.push(<DogList dogs={this.state.lists[dogListName]} listName={dogListName} key={`dog-list-${dogListName}`} />);
+		}
+
+		return 	<div className="dogLists">
 				<div className="row">
-					{this.state.dogs.map(function(dog){ return <DogListItem dog={dog} key={`dog-list-item-${dog.id}`} /> })}
+					{dogLists}
 				</div>
 			</div>;
 	}
