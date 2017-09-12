@@ -5,8 +5,8 @@ var React = require('react'),
 var Header = React.createClass({
 	render: function() {
 		return (
-			<div className="page-header">
-				<h1>Please Take My Dog</h1>
+			<div className="header row">
+				<h1 className="col-xs-12">Please Take My Dog</h1>
 			</div>
 		);
 	}
@@ -42,12 +42,14 @@ var PageNav = React.createClass({
 
 		return (
 			<div className="nav">
-				<div className="inline">
-					<Router.Link to="home">Home</Router.Link>
-					&nbsp; | &nbsp;
-					<Router.Link to="about">About</Router.Link>
+				<div className="nav-links">
+					<div className="inline">
+						<Router.Link to="home">Home</Router.Link>
+						&nbsp; | &nbsp;
+						<Router.Link to="about">About</Router.Link>
+					</div>
+					{login}
 				</div>
-				{login}
 				<hr />
 			</div>
 		);
