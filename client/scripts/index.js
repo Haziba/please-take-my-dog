@@ -46,7 +46,7 @@ var PageNav = React.createClass({
 					<div className="inline">
 						<Router.Link to="home">Home</Router.Link>
 						&nbsp; | &nbsp;
-						<Router.Link to="about">About</Router.Link>
+						<Router.Link to="viewDogs">Dogs</Router.Link>
 					</div>
 					{login}
 				</div>
@@ -100,7 +100,7 @@ window.Auth = (function(){
 
 var routes = {
 	Home: require('../routes/Home'),
-	About: require('../routes/About'),
+	ViewDogs: require('../routes/dogs/Index'),
 	ViewDog: require('../routes/dogs/View'),
 	AddDog: require('../routes/dogs/Add'),
 	DogAddTimeline: require('../routes/dogs/timeline/Add'),
@@ -112,8 +112,8 @@ var routes = {
 var routes = (
 	<Router.Route name="app" path="/" handler={App}>
 		<Router.Route name="home" path="/" handler={routes.Home}/>
-		<Router.Route name="about" path="/about" handler={routes.About}/>
 
+		<Router.Route name="viewDogs" path="/dogs" handler={routes.ViewDogs}/>
 		<Router.Route name="viewDog" path="/dog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="addDog" path="/dogs/add" handler={routes.AddDog}/>
 

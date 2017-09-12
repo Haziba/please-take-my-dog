@@ -1,12 +1,12 @@
-var 	React = require('react'),
-	DogGrid = require('../components/DogGrid.js');
+var 	React = require('react');
 
 var Home = React.createClass({
 	render: function() {
 		return (
 			<div>
-				<p>Home Page</p>
-				<DogGrid key="dog-grid" />
+				Thanks for checking out my dog site!<br />
+				<br />
+				Hopefully features will gradually slip out into the world!
 			</div>
 		);
 	},
