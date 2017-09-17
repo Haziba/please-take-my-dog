@@ -15,7 +15,7 @@ var DogTile = React.createClass({
 	},
 
 	_images: function(){
-		if(!this.props.details.images || this.props.details.images.length < 1 || this.props.details.images[0] == "h")
+		if(!this.props.details.images || this.props.details.images.length < 1)
 			return false;
 		return JSON.parse(this.props.details.images);
 	},

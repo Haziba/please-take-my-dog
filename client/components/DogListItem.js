@@ -15,7 +15,7 @@ var DogListItem = React.createClass({
 	},
 
 	_images: function(){
-		if(!this.props.dog.images || this.props.dog.images.length < 1 || this.props.dog.images[0] == "h")
+		if(!this.props.dog.images || this.props.dog.images.length < 1)
 			return false;
 		return JSON.parse(this.props.dog.images);
 	},
