@@ -51,7 +51,12 @@ var AddDog = React.createClass({
 						<input type="text" name="breed" value={this.state.breed} onChange={this.handleChange} disabled={this.state.posting} />
 					</label>
 					<br />
-					<input type="submit" value="Log In" disabled={this.state.posting} />
+					<label>
+						Picture:
+						<input type="image" className="btn btn-default" />
+					</label>
+					<br />
+					<input type="submit" value="Log In" className="btn btn-success" disabled={this.state.posting} />
 				</form>
 			</div>
 		);
