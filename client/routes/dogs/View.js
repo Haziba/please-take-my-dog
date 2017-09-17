@@ -1,6 +1,7 @@
 var React = require('react'),
 	Router = require('react-router'),
-	DogTimeline = require('../../components/DogTimeline.js');
+	DogTimeline = require('../../components/DogTimeline.js'),
+	Image = require('cloudinary-react').Image;
 
 var ViewDog = React.createClass({
 	getInitialState: function(){
@@ -43,11 +44,24 @@ var ViewDog = React.createClass({
 					<h4>Carer</h4>
 					<Router.Link to={"/carer/" + this.state.carer.id}>{this.state.carer.name}</Router.Link>
 				</div>
-				<img className="col-xs-12" src={this.state.dog.imageurl} />
+				<div className="col-xs-12">
+					{this._firstImage()}
+				</div>
 			</div>
 			<DogTimeline dog={this.state.dog} admin={this.state.admin} key={this.state.dog.id} />
 		</div>
 		);
+	},
+
+	_images: function(){
+		if(!this.state.dog.images || this.state.dog.images.length < 1)
+			return false;
+		return JSON.parse(this.state.dog.images);
+	},
+
+	_firstImage: function(){
+		let images = this._images();
+		return images ? <Image cloudName="haziba" publicId={images[0].public_id}></Image> : "";
 	}
 });
 
