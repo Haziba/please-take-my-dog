@@ -2,7 +2,7 @@ var React = require('react');
 
 var AddDog = React.createClass({
 	getInitialState: function(){
-		return { loaded: false, posting: false, name: "", size: 10, location: "52.00000,-1.00000", breed: null };
+		return { loaded: false, posting: false, name: "", size: 10, location: "52.00000,-1.00000", breed: null, images: [] };
 	},
 
 	componentWillMount: function(){
@@ -62,7 +62,7 @@ var AddDog = React.createClass({
 					<div className="form-group">
 						<label className="control-label col-sm-2">Picture:</label>
 						<div className="col-sm-10">
-							<input type="image" className="btn btn-default" value="Upload" />
+							<input type="image" className="btn btn-default" value="Upload" onClick={this.handleImageWidget} />
 						</div>
 					</div>
 
@@ -84,6 +84,25 @@ var AddDog = React.createClass({
 		this.setState(change);
 	},
 
+	handleImageWidget: function(e){
+		var that = this;
+
+		e.preventDefault();
+
+		cloudinary.openUploadWidget({ cloud_name: 'haziba', upload_preset: 'whats-up-dog', folder: 'carer-' + this.state.carer.Id}, function(error, result) {
+			//todo: Handle error
+			if(!error){
+				let images = that.state.images;
+
+				for(let i = 0; i < result.length; i++){
+					images.push({version: result[i].version, public_id: result[i].public_id});
+				}
+
+				that.setState({images: images});
+			}
+		});
+	},
+
 	handleSubmit: function(e){
 		var that = this;
 		e.preventDefault();
@@ -96,6 +115,7 @@ var AddDog = React.createClass({
 		  size: that.state.size,
 			location: that.state.location,
 			breed: that.state.breed,
+			images: that.state.images,
 		}, function(result){
 			if(result.success){
 				location = "/carer/" + that.state.carer.id;
