@@ -28,35 +28,49 @@ var AddDog = React.createClass({
 
 		return (
 			<div>
-				<p>Add Dog</p>
+				<h2>Add A Dog</h2>
 				{error}
-				<form onSubmit={this.handleSubmit}>
-					<label>
-						Name:
-						<input type="text" name="name" value={this.state.name} onChange={this.handleChange} disabled={this.state.posting} />
-					</label>
-					<br />
-					<label>
-						Size:
-						<input type="number" name="size" value={this.state.size} onChange={this.handleChange} disabled={this.state.posting} />
-					</label>
-					<br />
-					<label>
-						Location:
-						<input type="text" name="location" value={this.state.location} onChange={this.handleChange} disabled={this.state.posting} />
-					</label>
-					<br />
-					<label>
-						Breed:
-						<input type="text" name="breed" value={this.state.breed} onChange={this.handleChange} disabled={this.state.posting} />
-					</label>
-					<br />
-					<label>
-						Picture:
-						<input type="image" className="btn btn-default" />
-					</label>
-					<br />
-					<input type="submit" value="Log In" className="btn btn-success" disabled={this.state.posting} />
+				<form className="form-horizontal" onSubmit={this.handleSubmit}>
+					<div className="form-group">
+						<label className="control-label col-sm-2" for="name">Name:</label>
+						<div className="col-sm-10">
+							<input type="text" name="name" className="form-control" value={this.state.name} onChange={this.handleChange} disabled={this.state.posting} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-sm-2">Size:</label>
+						<div className="col-sm-10">
+							<input type="number" className="form-control" name="size" value={this.state.size} onChange={this.handleChange} disabled={this.state.posting} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-sm-2">Location:</label>
+						<div className="col-sm-10">
+							<input type="text" className="form-control" name="location" value={this.state.location} onChange={this.handleChange} disabled={this.state.posting} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-sm-2">Breed:</label>
+						<div className="col-sm-10">
+							<input type="text" className="form-control" name="breed" value={this.state.breed} onChange={this.handleChange} disabled={this.state.posting} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-sm-2">Picture:</label>
+						<div className="col-sm-10">
+							<input type="image" className="btn btn-default" value="Upload" />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<div className="col-sm-10 col-sm-offset-2">
+							<input type="submit" value="Add Dog" className="btn btn-success" disabled={this.state.posting} />
+						</div>
+					</div>
 				</form>
 			</div>
 		);
