@@ -14,20 +14,28 @@ var Login = React.createClass({
 
 		return (
 			<div>
-				<p>Login Page</p>
+				<h2>Login Page</h2>
 				{error}
-				<form onSubmit={this.handleSubmit}>
-					<label>
-						Email:
-						<input type="text" name="email" value={this.state.email} onChange={this.handleChange} disabled={this.state.loggingIn} />
-					</label>
-					<br />
-					<label>
-						Password:
-						<input type="password" name="pass" value={this.state.pass} onChange={this.handleChange} disabled={this.state.loggingIn} />
-					</label>
-					<br />
-					<input type="submit" value="Log In" disabled={this.state.loggingIn} />
+				<form className="form-horizontal" onSubmit={this.handleSubmit}>
+					<div className="form-group">
+						<label className="control-label col-sm-2" htmlFor="email">Email:</label>
+						<div className="col-xs-10">
+							<input type="text" name="email" className="form-control" value={this.state.email} onChange={this.handleChange} disabled={this.state.loggingIn} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-sm-2" htmlFor="pass">Password:</label>
+						<div className="col-xs-10">
+							<input type="password" name="pass" className="form-control" value={this.state.pass} onChange={this.handleChange} disabled={this.state.loggingIn} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<div className="col-sm-10 col-sm-offset-2">
+							<input type="submit" value="Log In" className="btn btn-success" disabled={this.state.loggingIn} />
+						</div>
+					</div>
 				</form>
 			</div>
 		);
