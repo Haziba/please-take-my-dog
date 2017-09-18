@@ -36,6 +36,8 @@ var PageNav = React.createClass({
 				login = <div className="inline">
 						&nbsp; | &nbsp;
 						<Router.Link to={"/carer/" + this.state.carer.id}>My Account</Router.Link>
+						&nbsp; | &nbsp;
+						<button className="btn btn-default" onClick={this._handleLogOut}><span>Log Out</span></button>
 					</div>;
 			}
 		}
@@ -53,6 +55,11 @@ var PageNav = React.createClass({
 				<hr />
 			</div>
 		);
+	},
+
+	_handleLogOut: function(){
+		$.removeCookie("auth");
+		location = "/";
 	}
 });
 
