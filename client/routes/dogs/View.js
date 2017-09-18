@@ -46,11 +46,11 @@ var ViewDog = React.createClass({
 
 		return (
 		<div>
+			<h2>{this.state.dog.name}</h2>
 			{adminControls}
 
 			<div className="row">
 				<div className="col-xs-6">
-					<p>{this.state.dog.name}</p>
 					<p>Breed: {this.state.dog.breed}</p>
 					<p>Size: {this.state.dog.size}</p>
 				</div>

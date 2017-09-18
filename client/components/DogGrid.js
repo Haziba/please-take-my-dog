@@ -31,13 +31,13 @@ var DogGrid = React.createClass({
 		let adminControls;
 
 		if(this.props.admin){
-			adminControls = 
+			adminControls =
 				<div className="row">
 					<div className="col-xs-6">
 						<p>You have {this.state.dogs.length} dogs</p>
 					</div>
 					<div className="col-xs-6 text-right">
-						<Router.Link to={"/dogs/add" }>Add Dog</Router.Link>
+						<Router.Link to={"/dogs/add"} className="btn btn-default">Add Dog</Router.Link>
 					</div>
 				</div>;
 		}

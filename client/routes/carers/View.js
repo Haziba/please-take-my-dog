@@ -33,7 +33,7 @@ var ViewCarer = React.createClass({
 		}
 
 		return 	<div>
-				<p>{this.state.carer.name}'s Account</p>
+				<h2>{this.state.carer.name}'s Account</h2>
 
 				<DogGrid admin={this.state.admin} carerId={this.state.carer.id} key={this.state.carer.id}/>
 			</div>;
