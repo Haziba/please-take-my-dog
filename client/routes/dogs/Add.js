@@ -1,4 +1,5 @@
-var React = require('react');
+var React = require('react'),
+	ImageHelper = require('../../helpers/ImageHelper.js');
 
 var AddDog = React.createClass({
 	getInitialState: function(){
@@ -25,6 +26,13 @@ var AddDog = React.createClass({
 		if(this.state.error){
 			error = <div>{this.state.error}</div>;
 		}
+
+		let images = this.state.images.map((image) => {
+			return <div className="col-xs-2">
+				{ImageHelper.Image(image)}
+				<button className="btn btn-xs btn-danger" onClick={(e) => this._handleImageRemoval(e, image)}>Remove</button>
+			</div>
+		});
 
 		return (
 			<div>
@@ -64,6 +72,11 @@ var AddDog = React.createClass({
 						<div className="col-sm-10">
 							<input type="image" className="btn btn-default" value="Upload" onClick={this.handleImageWidget} />
 						</div>
+						<div className="col-sm-10 col-sm-offset-2">
+							<div className="row">
+								{images}
+							</div>
+						</div>
 					</div>
 
 					<div className="form-group">
@@ -89,7 +102,12 @@ var AddDog = React.createClass({
 
 		e.preventDefault();
 
-		cloudinary.openUploadWidget({ cloud_name: 'haziba', upload_preset: 'whats-up-dog', folder: 'carer-' + this.state.carer.Id}, function(error, result) {
+		cloudinary.openUploadWidget({
+			cloud_name: 'haziba',
+			upload_preset: 'whats-up-dog',
+			folder: `carer-${this.state.carer.Id}`,
+			sources: ['facebook', 'instagram', 'google_photos', 'local', 'url'],
+		}, function(error, result) {
 			//todo: Handle error
 			if(!error){
 				let images = that.state.images;
@@ -124,6 +142,13 @@ var AddDog = React.createClass({
 				console.log("Failed");
 			}
 		});
+	},
+
+	_handleImageRemoval: function(e, image){
+		e.preventDefault();
+
+		this.state.images.splice(this.state.images.indexOf(image), 1);
+		this.setState({images: this.state.images});
 	}
 });
 
