@@ -14,30 +14,42 @@ var Register = React.createClass({
 
 		return (
 			<div>
-				<p>Register</p>
+				<h2>Register</h2>
 				{error}
-				<form onSubmit={this.handleSubmit}>
-					<label>
-						Email:
-						<input type="text" name="email" value={this.state.email} onChange={this.handleChange} disabled={this.state.registering} />
-					</label>
-					<br />
-					<label>
-						Name:
-						<input type="text" name="name" value={this.state.name} onChange={this.handleChange} disabled={this.state.registering} />
-					</label>
-					<br />
-					<label>
-						Password:
-						<input type="password" name="pass" value={this.state.pass} onChange={this.handleChange} disabled={this.state.registering} />
-					</label>
-					<br />
-					<label>
-						Confirm Password:
-						<input type="password" name="confirmPass" value={this.state.confirmPass} onChange={this.handleChange} disabled={this.state.registering} />
-					</label>
-					<br />
-					<input type="submit" value="Log In" disabled={this.state.loggingIn} />
+				<form className="form-horizontal" onSubmit={this.handleSubmit}>
+					<div className="form-group">
+						<label className="control-label col-xs-2" htmlFor="email">Email:</label>
+						<div className="col-xs-10">
+							<input type="text" name="email" className="form-control" value={this.state.email} onChange={this.handleChange} disabled={this.state.registering} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-xs-2" htmlFor="name">Name:</label>
+						<div className="col-xs-10">
+							<input type="text" name="name" className="form-control" value={this.state.name} onChange={this.handleChange} disabled={this.state.registering} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-xs-2" htmlFor="pass">Password:</label>
+						<div className="col-xs-10">
+							<input type="password" name="pass" className="form-control" value={this.state.pass} onChange={this.handleChange} disabled={this.state.registering} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-xs-2" htmlFor="confirmPass">Confirm Password:</label>
+						<div className="col-xs-10">
+							<input type="password" name="confirmPass" className="form-control" value={this.state.confirmPass} onChange={this.handleChange} disabled={this.state.registering} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<div className="col-xs-10 col-xs-offset-2">
+							<input type="submit" value="Log In" className="btn btn-success" disabled={this.state.loggingIn} />
+						</div>
+					</div>
 				</form>
 			</div>
 		);
