@@ -40,35 +40,35 @@ var AddDog = React.createClass({
 				{error}
 				<form className="form-horizontal" onSubmit={this.handleSubmit}>
 					<div className="form-group">
-						<label className="control-label col-sm-2" for="name">Name:</label>
+						<label className="control-label col-sm-2" htmlFor="name">Name:</label>
 						<div className="col-sm-10">
 							<input type="text" name="name" className="form-control" value={this.state.name} onChange={this.handleChange} disabled={this.state.posting} />
 						</div>
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-sm-2">Size:</label>
+						<label className="control-label col-sm-2" htmlFor="size">Size:</label>
 						<div className="col-sm-10">
 							<input type="number" className="form-control" name="size" value={this.state.size} onChange={this.handleChange} disabled={this.state.posting} />
 						</div>
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-sm-2">Location:</label>
+						<label className="control-label col-sm-2" htmlFor="location"s>Location:</label>
 						<div className="col-sm-10">
 							<input type="text" className="form-control" name="location" value={this.state.location} onChange={this.handleChange} disabled={this.state.posting} />
 						</div>
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-sm-2">Breed:</label>
+						<label className="control-label col-sm-2" htmlFor="breed">Breed:</label>
 						<div className="col-sm-10">
 							<input type="text" className="form-control" name="breed" value={this.state.breed} onChange={this.handleChange} disabled={this.state.posting} />
 						</div>
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-sm-2">Picture:</label>
+						<label className="control-label col-sm-2" htmlFor="picture">Picture:</label>
 						<div className="col-sm-10">
 							<input type="image" className="btn btn-default" value="Upload" onClick={this.handleImageWidget} />
 						</div>
