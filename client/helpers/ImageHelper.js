@@ -8,7 +8,7 @@ var ImageHelper = {
     if(!image)
       return;
 
-    return <Image cloudName="haziba" publicId={image.public_id}></Image>;
+    return <Image cloudName={'haziba'} publicId={image.public_id}></Image>;
   },
 
   FirstImage: function(images){
@@ -32,7 +32,7 @@ var ImageHelper = {
   },
 
   CloudinaryImageUrl: function(image){
-    return `http://res.cloudinary.com/haziba/image/upload/v${image.version}/${image.public_id}`;
+    return `https://res.cloudinary.com/haziba/image/upload/v${image.version}/${image.public_id}`;
   }
 };
 
