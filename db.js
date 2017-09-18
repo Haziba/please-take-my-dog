@@ -5,15 +5,15 @@ var connect = () => {
 	const connectionDetails = process.env.DATABASE_URL || {host: '127.0.0.1', port: process.env.DATABASE_URL || 5432, database: "postgres", user: "postgres"};
 
 	const client = new pg.Client(connectionDetails);
-	
-	client.connect().catch((err) => console.log("Failed to connect", err)); 
+
+	client.connect().catch((err) => console.log("Failed to connect", err));
 
 	return client;
 }
 
 var setupVersion = (client) => {
 	const versionExists = client.query("SELECT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname='public' AND tablename='version')")
-		.then((result) => { 
+		.then((result) => {
 			if(result.rows[0].exists){
 				client.query("SELECT number FROM version")
 					.then((result) => doUpdates(result.rows[0].number))
@@ -80,7 +80,7 @@ setupVersion(client);
 module.exports = {
 	all: (table) => {
 		return new Promise((success, failure) => {
-			client.query("select * from " + table)
+			client.query(`select * from ${table} where deleted=false`)
 				.then((data) => {
 					let rows = data.rows.map((row) => parseRow(row));
 
@@ -122,7 +122,7 @@ module.exports = {
 
 	allForParent: (table, parent, parentId) => {
 		return new Promise((success, failure) => {
-			client.query("select * from " + table + " where " + parent + "id=" + parentId)
+			client.query(`select * from ${table} where ${parent}id=${parentId} and deleted=false`)
 				.then((data) => {
 					let rows = data.rows.map((row) => parseRow(row));
 
@@ -138,7 +138,7 @@ module.exports = {
 		return new Promise((success, failure) => {
 			let cols = [];
 			let vals = [];
-			
+
 			for(let prop in obj){
 				cols.push(prop);
 				vals.push("'" + obj[prop] + "'");
@@ -158,7 +158,7 @@ module.exports = {
 	update: (table, objId, obj) => {
 		return new Promise((success, failure) => {
 			let sets = [];
-			
+
 			for(let prop in obj){
 				sets.push(`${prop}='${obj[prop]}'`);
 			}
@@ -171,6 +171,19 @@ module.exports = {
 					console.log("Failed to update " + table);
 					failure("Server error");
 				});
+		});
+	},
+
+	delete: (table, objId) => {
+		return new Promise((success, failure) => {
+			client.query(`update ${table} set deleted=true where id='${objId}'`)
+				.then(() => success()).catch((err) => {
+					console.log(`Failed to delete ${table}`, err);
+					failure("Deletion failed");
+				}).catch((err) => {
+					console.log(`Failed to delete ${table}`);
+					failure("Server error");
+				})
 		});
 	},
 
