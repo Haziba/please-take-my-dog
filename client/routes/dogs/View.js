@@ -1,7 +1,10 @@
 var React = require('react'),
 	Router = require('react-router'),
 	DogTimeline = require('../../components/DogTimeline.js'),
-	Image = require('cloudinary-react').Image;
+	Image = require('cloudinary-react').Image,
+	ImageHelper = require('../../helpers/ImageHelper.js');
+
+import ImageGallery from 'react-image-gallery';
 
 var ViewDog = React.createClass({
 	getInitialState: function(){
@@ -32,6 +35,12 @@ var ViewDog = React.createClass({
 			return <div><p>Loading {this.props.params.name}...</p></div>;
 		}
 
+		const images = this._images().map((image) => {
+			return {
+				original: ImageHelper.CloudinaryImageUrl(image)
+			}
+		});
+
 		return (
 		<div>
 			<div className="row">
@@ -45,7 +54,7 @@ var ViewDog = React.createClass({
 					<Router.Link to={"/carer/" + this.state.carer.id}>{this.state.carer.name}</Router.Link>
 				</div>
 				<div className="col-xs-12">
-					{this._firstImage()}
+					<ImageGallery items={images} slideInterval={2000} showThumbnails={false}/>
 				</div>
 			</div>
 			<DogTimeline dog={this.state.dog} admin={this.state.admin} key={this.state.dog.id} />
