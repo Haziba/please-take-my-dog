@@ -14,5 +14,5 @@ coverage
 # Dependency directory
 node_modules
 
-# Generated css
-public/styles/*.css
+# Generated app.css
+public/styles/app.css
