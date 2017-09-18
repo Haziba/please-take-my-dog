@@ -79,7 +79,7 @@ var dbFailure = (res, failureMessage, err) => {
 
 app.get('/api/dogs', (req, res) => dbResponse(res, {dogs: db.all("dog")}, "Failed to get dogs"));
 
-app.get('/api/dogs/quicklist', (req, res) => dbResponse(res, {unfiltered: db.all("dog")}, "Failed to get quicklist dogs"));
+app.get('/api/dogs/quicklist', (req, res) => dbResponse(res, {all: db.all("dog")}, "Failed to get quicklist dogs"));
 
 app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForParent("dog", "carer", req.params.carerId)}, "Failed to get dogs for carer `" + req.params.carerId + "`"));
 
