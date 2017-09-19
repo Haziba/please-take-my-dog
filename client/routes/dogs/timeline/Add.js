@@ -32,20 +32,28 @@ var AddTimeline = React.createClass({
 
 		return (
 			<div>
-				<p>Add Dog</p>
+				<h2>Add Dog</h2>
 				{error}
-				<form onSubmit={this.handleSubmit}>
-					<label>
-						Event:
-						<input type="text" name="event" onChange={this.handleChange} disabled={this.state.posting} />
-					</label>
-					<br />
-					<label>
-						Occurred On:
-						<input type="date" name="occurredOn" onChange={this.handleChange} disabled={this.state.posting} />
-					</label>
-					<br />
-					<input type="submit" value="Add Event" disabled={this.state.posting} />
+				<form onSubmit={this.handleSubmit} className="form-horizontal">
+					<div className="form-group">
+						<label className="control-label col-sm-2" htmlFor="event">Event:</label>
+						<div className="col-sm-10">
+							<input type="text" name="event" className="form-control" onChange={this.handleChange} disabled={this.state.posting} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<label className="control-label col-sm-2" htmlFor="occurredOn">Occurred On:</label>
+						<div className="col-sm-10">
+							<input type="date" name="occurredOn" className="form-control" onChange={this.handleChange} disabled={this.state.posting} />
+						</div>
+					</div>
+
+					<div className="form-group">
+						<div className="col-sm-10 col-sm-offset-2">
+							<input type="submit" value="Add Event" className="btn btn-success" disabled={this.state.posting} />
+						</div>
+					</div>
 				</form>
 			</div>
 		);
@@ -66,7 +74,7 @@ var AddTimeline = React.createClass({
 		that.setState({ posting: true });
 
 		this.state.dog.timeline.push({event: this.state.event, occurredOn: this.state.occurredOn});
-		
+
 		$.post("/api/dog/" + that.state.dog.id + "/update", {
 			dog: this.state.dog
 		}, function(result){
