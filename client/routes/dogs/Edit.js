@@ -48,8 +48,22 @@ var EditDog = React.createClass({
 
 		return (
 			<div>
-				<h2>Edit {this.state.dog.name}</h2>
+        <div className="row">
+          <div className="col-sm-4">
+				    <h2>Edit {this.state.dog.name}</h2>
+          </div>
+
+          <div className="text-right col-sm-8">
+            <div className="btn-group">
+              <button className="btn btn-primary" onClick={this._handleTransfer}>Transfer Ownership</button>
+              <button className="btn btn-warning" onClick={this._handlePassingOn}>Passed Away</button>
+              <button className="btn btn-danger" onClick={this._handleDelete}>Delete</button>
+            </div>
+          </div>
+        </div>
+
 				{error}
+
 				<form className="form-horizontal" onSubmit={this.handleSubmit}>
 					<div className="form-group">
 						<label className="control-label col-sm-2" htmlFor="name">Name:</label>
@@ -159,6 +173,14 @@ var EditDog = React.createClass({
 		this.state.dog.images.splice(this.state.dog.images.indexOf(image), 1);
 		this.setState({images: this.state.dog.images});
 	},
+
+  _handleTransfer: function(e){
+    alert("Transfering on not supported. Dogs are for life not just for Christmas");
+  },
+
+  _handlePassingOn: function(e){
+    alert("Passing on not supported. Dogs live forever");
+  },
 
   _handleDelete: function(e){
     var confirm = window.confirm("Are you sure? If this dog has changed owner or unfortunately passed on, please choose those options instead");
