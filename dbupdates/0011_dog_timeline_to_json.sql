@@ -1,0 +1,3 @@
+TRUNCATE dog;
+ALTER TABLE dog DROP COLUMN timeline;
+ALTER TABLE dog ADD COLUMN timeline json NOT NULL DEFAULT '[]'::JSON;

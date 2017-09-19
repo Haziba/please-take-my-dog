@@ -2,15 +2,11 @@ var	React 	= require('react'),
 	Router 	= require('react-router');
 
 var DogTimeline = React.createClass({
-	getInitialState: function(){
-		return { timeline: JSON.parse(this.props.dog.timeline) };
-	},
-
 	render: function(){
 		let adminControls;
 
 		if(this.props.admin){
-			adminControls = 
+			adminControls =
 				<div className="row">
 					<div className="col-xs-6">
 					</div>
@@ -21,18 +17,16 @@ var DogTimeline = React.createClass({
 		}
 
 		var events = [];
-		if(this.state.timeline){
-			for(let event of this.state.timeline){
-				events.push(
-					<div className="row" key={"timeline-event-" + events.length}>
-					    	<div className="col-xs-8">
-							{event.event}
-						</div>
-						<div className="col-xs-4 text-right">
-							{event.occurredOn}
-						</div>
-					</div>);
-			}
+		for(let event of this.props.dog.timeline){
+			events.push(
+				<div className="row" key={"timeline-event-" + events.length}>
+				    	<div className="col-xs-8">
+						{event.event}
+					</div>
+					<div className="col-xs-4 text-right">
+						{event.occurredOn}
+					</div>
+				</div>);
 		}
 
 		return 	<div>

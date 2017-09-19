@@ -62,7 +62,7 @@ var ViewDog = React.createClass({
 					{ImageHelper.Gallery(this.state.dog.images)}
 				</div>
 			</div>
-			<DogTimeline dog={this.state.dog} admin={this.state.admin} key={this.state.dog.id} />
+			<DogTimeline dog={this.state.dog} admin={this.state.admin} key={`timeline-${this.state.dog.id}`} />
 		</div>
 		);
 	}

@@ -65,12 +65,8 @@ var AddTimeline = React.createClass({
 
 		that.setState({ posting: true });
 
-		console.log(this.state.dog);
-		var timeline = this.state.dog.timeline ? JSON.parse(this.state.dog.timeline) : [];
-		timeline.push({event: this.state.event, occurredOn: this.state.occurredOn});
-		this.state.dog.timeline = JSON.stringify(timeline);
-		console.log(this.state.dog);
-
+		this.state.dog.timeline.push({event: this.state.event, occurredOn: this.state.occurredOn});
+		
 		$.post("/api/dog/" + that.state.dog.id + "/update", {
 			dog: this.state.dog
 		}, function(result){
