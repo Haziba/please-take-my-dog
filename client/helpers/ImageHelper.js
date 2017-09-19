@@ -24,15 +24,25 @@ var ImageHelper = {
 
     const images = galleryImages.map((image) => {
       return {
-        original: ImageHelper.CloudinaryImageUrl(image)
+        original: ImageHelper.CloudinaryImageUrl(image, { gallery_size: true })
       }
     });
 
     return <ImageGallery items={images} slideInterval={2000} showThumbnails={false}/>;
   },
 
-  CloudinaryImageUrl: function(image){
-    return `https://res.cloudinary.com/haziba/image/upload/v${image.version}/${image.public_id}`;
+  CloudinaryImageUrl: function(image, opts){
+    let filters = '';
+
+    if(opts){
+      if(opts.gallery_size){
+        filters += 'c_scale,h_500';
+      } else if(opts.tile_size){
+        filters += 'c_scale,h_250';
+      }
+    }
+
+    return `https://res.cloudinary.com/haziba/image/upload/${filters}/v${image.version}/${image.public_id}`;
   }
 };
 
