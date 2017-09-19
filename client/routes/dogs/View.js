@@ -59,35 +59,12 @@ var ViewDog = React.createClass({
 					<Router.Link to={"/carer/" + this.state.carer.id}>{this.state.carer.name}</Router.Link>
 				</div>
 				<div className="col-xs-12">
-					{ImageHelper.Gallery(this._images())}
+					{ImageHelper.Gallery(this.state.dog.images)}
 				</div>
 			</div>
 			<DogTimeline dog={this.state.dog} admin={this.state.admin} key={this.state.dog.id} />
 		</div>
 		);
-	},
-
-	_images: function(){
-		if(!this.state.dog.images || this.state.dog.images.length < 1)
-			return false;
-		return JSON.parse(this.state.dog.images);
-	},
-
-	_handleDelete: function(){
-		var confirm = window.confirm("Are you sure? If this dog has changed owner or unfortunately passed on, please choose those options instead");
-
-		if(confirm){
-			$.ajax({
-				url: '/api/dog/' + this.state.dog.id,
-				type: 'DELETE'
-			}).then((result) => {
-				if(result.success){
-					location = `/carer/${this.state.carer.id}`;
-				} else {
-					//todo: Handle failure
-				}
-			});
-		}
 	}
 });
 

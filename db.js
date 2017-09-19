@@ -74,6 +74,16 @@ var parseRow = (row) => {
 	return row;
 }
 
+var valForSql = (val) => {
+	//todo: Make a more robust check, for the moment json is the only object we'd save tho
+	var isJson = typeof(val) == "object";
+	if(isJson){
+		return `'${JSON.stringify(val)}'::JSON`;
+	} else {
+		return `'${val}'`;
+	}
+}
+
 var client = connect();
 setupVersion(client);
 
@@ -141,7 +151,7 @@ module.exports = {
 
 			for(let prop in obj){
 				cols.push(prop);
-				vals.push("'" + obj[prop] + "'");
+				vals.push(valForSql(obj[prop]));
 			}
 
 			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + vals.join(",") + ")")
@@ -160,7 +170,7 @@ module.exports = {
 			let sets = [];
 
 			for(let prop in obj){
-				sets.push(`${prop}='${obj[prop]}'`);
+				sets.push(`${prop}=${valForSql(obj[prop])}`);
 			}
 
 			client.query("update " + table + " set " + sets.join(', ') + " where id=" + objId)

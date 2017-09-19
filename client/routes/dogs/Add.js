@@ -133,7 +133,7 @@ var AddDog = React.createClass({
 		  size: that.state.size,
 			location: that.state.location,
 			breed: that.state.breed,
-			images: JSON.stringify(that.state.images),
+			images: that.state.images,
 		}, function(result){
 			if(result.success){
 				location = "/carer/" + that.state.carer.id;
