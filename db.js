@@ -116,6 +116,28 @@ module.exports = {
 		});
 	},
 
+	allFiltered: (table, filter) => {
+		var filters = "";
+
+		for(var prop in filter){
+			if(filters != "")
+				filters += " and ";
+			filters += prop + "='" + filter[prop] + "'";
+		}
+
+		return new Promise((success, failure) => {
+			client.query("select * from " + table + " where " + filters)
+				.then((data) => {
+					let rows = data.rows.map((row) => parseRow(row));
+
+					success(rows);
+				}).catch((err) => {
+					console.log("Failed to get table=" + table + ", filters=`" + filters + "`", err);
+					failure("Server error");
+				});
+		});
+	},
+
 	getByChild: (table, child, childId) => {
 		return new Promise((success, failure) => {
 			client.query("select t.* from " + table + " t inner join " + child + " c on c." + table + "id=t.id")
