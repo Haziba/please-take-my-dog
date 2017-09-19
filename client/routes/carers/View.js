@@ -43,7 +43,7 @@ var ViewCarer = React.createClass({
 				<div className="col-xs-12">
 					<h3>Transfers</h3>
 
-					{this.state.transfers.map((dog) => <DogTile details={dog} acceptTransfer={() => this._acceptTransfer(dog.id)} key={`transfer-${dog.id}`} /> )}
+					{this.state.transfers.map((dog) => <DogTile details={dog} acceptTransfer={this._acceptTransfer} key={`transfer-${dog.id}`} /> )}
 				</div>
 			</div>;
 
@@ -64,7 +64,24 @@ var ViewCarer = React.createClass({
 	},
 
 	_acceptTransfer: function(dogId){
-		console.log(dogId);
+		var that = this;
+
+		var dog = this.state.transfers.filter(t => t.id == dogId)[0];
+		var currentDate = new Date();
+
+		dog.carerhistory.push({id: this.state.carer.id, on: (new Date().toISOString().slice(0, 10))});
+		dog.carerid = this.state.carer.id;
+		//todo: Replace this hack
+		dog.transfercarerid = "null";
+
+		$.ajax({
+			url: `/api/dog/${dog.id}`,
+			data: {dog: dog},
+			type: 'PUT'
+		}).then((result) => {
+			//todo: Update the grid after
+			that.setState({transfers: this.state.transfers.filter(t => t != dog)});
+		});
 	}
 });
 

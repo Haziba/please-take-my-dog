@@ -36,7 +36,7 @@ var ViewDog = React.createClass({
 		let adminControls;
 
 		if(this.state.admin){
-			if(this.state.transfercarerid){
+			if(!this.state.dog.transfercarerid){
 				adminControls =
 					<div className="col-xs-6 text-right">
 						<Router.Link to={`/dog/${this.state.dog.id}/edit`} className="btn btn-default">Edit</Router.Link>

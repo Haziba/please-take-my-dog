@@ -75,6 +75,11 @@ var parseRow = (row) => {
 }
 
 var valForSql = (val) => {
+	//todo: Replace this hack
+	if(val == "null"){
+		return val;
+	}
+
 	//todo: Make a more robust check, for the moment json is the only object we'd save tho
 	var isJson = typeof(val) == "object";
 	if(isJson){
