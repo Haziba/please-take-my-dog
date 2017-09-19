@@ -1,7 +1,7 @@
 module.exports = function(app){
   var db = require('./db.js');
 
-  var dbResponse = (res, dbActions, failureMessage) => {
+  var dbResponse = (req, res, dbActions, failureMessage) => {
     let data, promises = [];
 
     if(Promise.resolve(dbActions) == dbActions){
@@ -22,48 +22,64 @@ module.exports = function(app){
 
   	Promise.all(promises)
       .then((resp) => dbSuccess(res, data ? data : resp[0]))
-  		.catch((err) => dbFailure(res, failureMessage, err));
+  		.catch((err) => dbFailure(req, res, failureMessage, err));
   };
 
   var dbSuccess = (res, data) => {
   	res.send({success: true, data: data});
   };
 
-  var dbFailure = (res, failureMessage, err) => {
-  	console.log(failureMessage, err);
-  	res.status(500).send({success: false, message: failureMessage});
+  var dbFailure = (req, res, failureMessage, err) => {
+  	console.log(failureMessage(req), err);
+  	res.status(500).send({success: false, message: failureMessage(res)});
   };
 
-  app.get('/api/dogs', (req, res) => dbResponse(res, {dogs: db.all("dog")}, "Failed to get dogs"));
+  let respond = function(method, url, auth, response){
+    app[method](url, (req, res) => {
+      db.validateAuthTicket(req.cookies.auth).then((carer) => {
+        auth(req, carer, (authed) => {
+          if(authed){
+            response(req, res);
+            return;
+          }
+          res.status(403);
+          res.send('Forbidden');
+        });
+      }).catch((err) => {
+        console.log('Failed to auth route', err);
+      });
+    });
+  }
 
-  app.get('/api/dogs/quicklist', (req, res) => dbResponse(res, {all: db.all("dog")}, "Failed to get quicklist dogs"));
+  let authCheck = {
+    loggedIn: (carer) => {
+      if(!!carer){
+        return true;
+      }
+      return false;
+    },
 
-  app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForParent("dog", "carer", req.params.carerId)}, "Failed to get dogs for carer `" + req.params.carerId + "`"));
+    loggedInAs: (carer, carerId) => {
+      if(!authCheck.loggedIn(carer))
+        return false;
+      if(carer.id != carerId)
+        return false;
+      return true;
+    },
+  }
 
-  app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dog", req.params.dogId), carer: db.getByChild("carer", "dog", req.params.dogId)}, "Failed to get dog `" + req.params.dogId + "`"));
+  require('./api/dogs.js')(app, respond, dbResponse, authCheck, db);
 
-  app.put('/api/dog/:dogId', (req, res) => dbResponse(res, db.update("dog", req.params.dogId, req.body.dog)));
+  app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, {carer: db.get("carer", req.params.carerId)}, (req) => { "Failed to get carer `" + req.params.carerId + "`" }));
 
-  app.delete('/api/dog/:dogId', (req, res) => dbResponse(res, db.delete("dog", req.params.dogId)));
+  app.post('/api/auth/check', (req, res) => dbResponse(req, res, db.validateAuthTicket(req.body.ticket), (req) => { "Failed to authenticate ticket `" + req.body.ticket + "`" }));
 
-  app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dog', req.body)}, "Failed to insert dog `" + req.body + "`"));
-
-  app.post('/api/dog/:dogId/update', (req, res) => dbResponse(res, {dog: db.update('dog', req.params.dogId, req.body.dog)}, "Failed to update dog `" + req.params.dogId + "`, `" + req.body + "`"));
-
-  app.get('/api/dog/:dogId/transfer', (req, res) => dbResponse(res, {dog: db.get("dog", req.params.dogId), carers: db.all("carer")}, "Failed to get dog `" + req.params.dogId + "` and all carers"));
-
-  app.get('/api/dogs/:carerId/transfers', (req, res) => dbResponse(res, {transfers: db.allFiltered("dog", {transfercarerid: req.params.carerId})}))
-
-  app.get('/api/carer/:carerId', (req, res) => dbResponse(res, {carer: db.get("carer", req.params.carerId)}, "Failed to get carer `" + req.params.carerId + "`"));
-
-  app.post('/api/auth/check', (req, res) => dbResponse(res, db.validateAuthTicket(req.body.ticket), "Failed to authenticate ticket `" + req.body.ticket + "`"));
-
-  app.post('/api/auth/login', (req, res) => dbResponse(res, db.validateAuthLogin(req.body), "Failed to authenticate user `" + req.body.email + "`"));
+  app.post('/api/auth/login', (req, res) => dbResponse(req, res, db.validateAuthLogin(req.body), (req) => { "Failed to authenticate user `" + req.body.email + "`" }));
 
   app.post('/api/auth/register', (req, res) => {
   	db.isEmailAvailable(req.body.email)
-  		.then(() => dbResponse(res, {carer: db.insert("carer", req.body)}, "Failed to create account"))
-  		.catch((err) => dbFailure(res, "Email address in use", err));
+  		.then(() => dbResponse(req, res, {carer: db.insert("carer", req.body)}, (req) => { "Failed to create account" }))
+  		.catch((err) => dbFailure(req, res, "Email address in use", err));
   });
 
   app.get('*', (req, res) => res.render('index.html'));

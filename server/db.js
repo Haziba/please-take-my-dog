@@ -76,8 +76,8 @@ var parseRow = (row) => {
 
 var valForSql = (val) => {
 	//todo: Replace this hack
-	if(val == "null"){
-		return val;
+	if(val == "null" || val == ''){
+		return "null";
 	}
 
 	//todo: Make a more robust check, for the moment json is the only object we'd save tho
@@ -240,9 +240,13 @@ module.exports = {
 	},
 
 	validateAuthTicket: (authTicket) => {
-		let authDetails = authTicket.split(':');
-
 		return new Promise((success, failure) => {
+			if(!authTicket || authTicket.indexOf(':') < 0){
+				failure("Invalid auth ticket");
+				return;
+			}
+
+			let authDetails = authTicket.split(':');
 			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'")
 				.then((data) => {
 					if(data.rowCount > 0){
