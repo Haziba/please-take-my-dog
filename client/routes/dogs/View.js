@@ -37,17 +37,17 @@ var ViewDog = React.createClass({
 
 		if(this.state.admin){
 			adminControls =
-				<div className="row">
-					<div className="col-xs-12 text-right">
-						<button className="btn btn-danger" onClick={this._handleDelete}><span>Delete Dog</span></button>
-					</div>
+				<div className="col-xs-6 text-right">
+					<Router.Link to={`/dog/${this.state.dog.id}/edit`} className="btn btn-default">Edit</Router.Link>
 				</div>;
 		}
-
+		
 		return (
 		<div>
-			<h2>{this.state.dog.name}</h2>
-			{adminControls}
+			<div className="row">
+				<h2 className="col-xs-6">{this.state.dog.name}</h2>
+				{adminControls}
+			</div>
 
 			<div className="row">
 				<div className="col-xs-6">

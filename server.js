@@ -85,6 +85,8 @@ app.get('/api/dogs/:carerId', (req, res) => dbResponse(res, {dogs: db.allForPare
 
 app.get('/api/dog/:dogId', (req, res) => dbResponse(res, {dog: db.get("dog", req.params.dogId), carer: db.getByChild("carer", "dog", req.params.dogId)}, "Failed to get dog `" + req.params.dogId + "`"));
 
+app.put('/api/dog/:dogId', (req, res) => dbResponse(res, db.update("dog", req.params.dogId, req.body.dog)));
+
 app.delete('/api/dog/:dogId', (req, res) => dbResponse(res, db.delete("dog", req.params.dogId)));
 
 app.post('/api/dogs/add', (req, res) => dbResponse(res, {dog: db.insert('dog', req.body)}, "Failed to insert dog `" + req.body + "`"));
