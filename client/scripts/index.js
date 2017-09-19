@@ -111,6 +111,7 @@ var routes = {
 	ViewDog: require('../routes/dogs/View'),
 	AddDog: require('../routes/dogs/Add'),
 	EditDog: require('../routes/dogs/Edit'),
+	TransferDog: require('../routes/dogs/Transfer'),
 	DogAddTimeline: require('../routes/dogs/timeline/Add'),
 	Login: require('../routes/Login'),
 	Register: require('../routes/Register'),
@@ -122,6 +123,7 @@ var routes = (
 		<Router.Route name="home" path="/" handler={routes.Home}/>
 
 		<Router.Route name="viewDogs" path="/dogs" handler={routes.ViewDogs}/>
+		<Router.Route name="transferDog" path="/dog/:id/transfer" handler={routes.TransferDog}/>
 		<Router.Route name="editDog" path="/dog/:id/edit" handler={routes.EditDog}/>
 		<Router.Route name="viewDog" path="/dog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="addDog" path="/dogs/add" handler={routes.AddDog}/>

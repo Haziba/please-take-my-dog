@@ -1,4 +1,5 @@
 var React = require('react'),
+	Router = require('react-router'),
 	ImageHelper = require('../../helpers/ImageHelper.js');
 
 var EditDog = React.createClass({
@@ -55,7 +56,7 @@ var EditDog = React.createClass({
 
           <div className="text-right col-sm-8">
             <div className="btn-group">
-              <button className="btn btn-primary" onClick={this._handleTransfer}>Transfer Ownership</button>
+              <Router.Link to={`/dog/${this.state.dog.id}/transfer`} className="btn btn-primary">Transfer Ownership</Router.Link>
               <button className="btn btn-warning" onClick={this._handlePassingOn}>Passed Away</button>
               <button className="btn btn-danger" onClick={this._handleDelete}>Delete</button>
             </div>
@@ -173,10 +174,6 @@ var EditDog = React.createClass({
 		this.state.dog.images.splice(this.state.dog.images.indexOf(image), 1);
 		this.setState({images: this.state.dog.images});
 	},
-
-  _handleTransfer: function(e){
-    alert("Transfering on not supported. Dogs are for life not just for Christmas");
-  },
 
   _handlePassingOn: function(e){
     alert("Passing on not supported. Dogs live forever");

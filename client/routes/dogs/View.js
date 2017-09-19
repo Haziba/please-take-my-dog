@@ -36,12 +36,19 @@ var ViewDog = React.createClass({
 		let adminControls;
 
 		if(this.state.admin){
-			adminControls =
-				<div className="col-xs-6 text-right">
-					<Router.Link to={`/dog/${this.state.dog.id}/edit`} className="btn btn-default">Edit</Router.Link>
-				</div>;
+			if(this.state.transfercarerid){
+				adminControls =
+					<div className="col-xs-6 text-right">
+						<Router.Link to={`/dog/${this.state.dog.id}/edit`} className="btn btn-default">Edit</Router.Link>
+					</div>;
+			} else {
+				adminControls =
+					<div className="col-xs-6 text-right">
+						<button className="btn btn-default" disabled={true}>Transfer in Progress</button>
+					</div>;
+			}
 		}
-		
+
 		return (
 		<div>
 			<div className="row">
