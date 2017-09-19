@@ -8,9 +8,7 @@ module.exports = function(app, respond, dbResponse, authCheck, db){
   app.get('/api/dog/:dogId', (req, res) => dbResponse(req, res, {dog: db.get("dog", req.params.dogId), carer: db.getByChild("carer", "dog", req.params.dogId)}, (req) => { "Failed to get dog `" + req.params.dogId + "`" }));
 
   respond('put', '/api/dog/:dogId', (req, carer, callback) => {
-    db.get('dog', req.params.dogId).then((result) => {
-      callback(authCheck.loggedInAs(carer, result.carerid));
-    });
+    authCheck.isDogOwner(carer, req.params.dogId).then(callback);
   }, (req, res) => dbResponse(req, res, db.update("dog", req.params.dogId, req.body.dog), (req) => "Failed to upload dog `" + req.params.dogId + "`"));
 
   app.delete('/api/dog/:dogId', (req, res) => dbResponse(req, res, db.delete("dog", (req) => { req.params.dogId })));

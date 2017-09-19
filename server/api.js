@@ -66,6 +66,16 @@ module.exports = function(app){
         return false;
       return true;
     },
+
+    isDogOwner: (carer, dogId) => {
+      return new Promise((success, failure) => {
+        db.get('dog', dogId).then((result) => {
+          success(authCheck.loggedInAs(carer, result.carerid));
+        }).catch((err) => {
+          failure(err);
+        });
+      });
+    }
   }
 
   require('./api/dogs.js')(app, respond, dbResponse, authCheck, db);
