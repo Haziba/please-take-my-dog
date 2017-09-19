@@ -1,4 +1,5 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var babelify = require('babelify');
 var browserify = require('browserify-middleware');
 var less = require('less-middleware');
@@ -8,6 +9,7 @@ var config = require('./client/config');
 
 // initialise express
 var app = express();
+app.use(cookieParser());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
