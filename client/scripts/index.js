@@ -59,6 +59,8 @@ var PageNav = React.createClass({
 
 	_handleLogOut: function(){
 		$.removeCookie("auth");
+
+		this.setState({authed: false});
 		location = "/";
 	}
 });
