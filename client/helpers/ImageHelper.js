@@ -36,9 +36,9 @@ var ImageHelper = {
 
     if(opts){
       if(opts.gallery_size){
-        filters += 'c_scale,h_500';
+        filters += 'c_lpad,h_400,w_500';
       } else if(opts.tile_size){
-        filters += 'c_scale,h_250';
+        filters += 'c_lpad,h_250,w_250';
       }
     }
 
