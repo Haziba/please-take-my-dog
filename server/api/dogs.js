@@ -9,13 +9,13 @@ module.exports = function(app, respond, dbResponse, authCheck, db){
 
   respond('put', '/api/dog/:dogId', (req, carer, callback) => {
     authCheck.isDogOwner(carer, req.params.dogId).then(callback);
-  }, (req, res) => dbResponse(req, res, db.update("dog", req.params.dogId, req.body.dog), (req) => "Failed to upload dog `" + req.params.dogId + "`"));
+  }, (req, res) => dbResponse(req, res, db.update("dog", req.params.dogId, req.body.dog), (req) => "Failed to update dog `" + req.params.dogId + "`"));
 
-  app.delete('/api/dog/:dogId', (req, res) => dbResponse(req, res, db.delete("dog", (req) => { req.params.dogId })));
+  respond('delete', '/api/dog/:dogId', (req, carer, callback) => {
+    authCheck.isDogOwner(carer, req.params.dogId).then(callback);
+  }, (req, res) => dbResponse(req, res, db.delete("dog", (req) => { req.params.dogId }), (req) => { "Failed to delete dog `" + req.params.dogId + "`"}));
 
   app.post('/api/dogs/add', (req, res) => dbResponse(req, res, {dog: db.insert('dog', req.body)}, (req) => { "Failed to insert dog `" + req.body + "`" }));
-
-  app.post('/api/dog/:dogId/update', (req, res) => dbResponse(req, res, {dog: db.update('dog', req.params.dogId, req.body.dog)}, (req) => { "Failed to update dog `" + req.params.dogId + "`, `" + req.body + "`" }));
 
   app.get('/api/dog/:dogId/transfer', (req, res) => dbResponse(req, res, {dog: db.get("dog", req.params.dogId), carers: db.all("carer")}, (req) => { "Failed to get dog `" + req.params.dogId + "` and all carers" }));
 
