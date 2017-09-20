@@ -8,12 +8,14 @@ var DogTile = React.createClass({
 	},
 
 	render: function(){
-		return	<div className="col-xs-6 col-sm-4 col-md-3 dog-tile">
-				<Router.Link to={"/dog/" + this.props.details.id + "/" + this.props.details.name}>
-					<div>{ImageHelper.FirstImage(this.props.details.images)}</div>
-					<h3 className="text-center">{this.props.details.name}</h3>
-				</Router.Link>
-				{this.props.acceptTransfer ? <button className="btn btn-success" onClick={this._acceptTransfer} disabled={this.state.accepting}>Accept</button> : null}
+		return	<div className="col-xs-6 col-sm-4 col-md-3">
+				<div className="dog-tile">
+					<Router.Link to={"/dog/" + this.props.details.id + "/" + this.props.details.name}>
+						<div>{ImageHelper.FirstImage(this.props.details.images)}</div>
+						<h3 className="text-center">{this.props.details.name}</h3>
+					</Router.Link>
+					{this.props.acceptTransfer ? <button className="btn btn-success" onClick={this._acceptTransfer} disabled={this.state.accepting}>Accept</button> : null}
+				</div>
 			</div>;
 	},
 
