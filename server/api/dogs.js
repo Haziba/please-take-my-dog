@@ -15,7 +15,9 @@ module.exports = function(app, respond, dbResponse, authCheck, db){
     authCheck.isDogOwner(carer, req.params.dogId).then(callback);
   }, (req, res) => dbResponse(req, res, db.delete("dog", (req) => { req.params.dogId }), (req) => { "Failed to delete dog `" + req.params.dogId + "`"}));
 
-  app.post('/api/dogs/add', (req, res) => dbResponse(req, res, {dog: db.insert('dog', req.body)}, (req) => { "Failed to insert dog `" + req.body + "`" }));
+  respond('post', '/api/dogs/add', (req, carer, callback) => {
+    callback(authCheck.loggedIn(carer) && req.body.carerid == carer.id)
+  }, (req, res) => dbResponse(req, res, {dog: db.insert('dog', req.body)}, (req) => { "Failed to insert dog `" + req.body + "`" }));
 
   app.get('/api/dog/:dogId/transfer', (req, res) => dbResponse(req, res, {dog: db.get("dog", req.params.dogId), carers: db.all("carer")}, (req) => { "Failed to get dog `" + req.params.dogId + "` and all carers" }));
 

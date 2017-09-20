@@ -128,7 +128,7 @@ var AddDog = React.createClass({
 		that.setState({ posting: true });
 
 		$.post("/api/dogs/add", {
-			carerId: that.state.carer.id,
+			carerid: that.state.carer.id,
 			name: that.state.name,
 		  size: that.state.size,
 			location: that.state.location,
