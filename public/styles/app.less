@@ -6,8 +6,12 @@
 // Import Bootstrap
 @import "../../node_modules/bootstrap/less/bootstrap.less";
 
-html, body, .container, .container > .row, main {
+body {
 	min-height: 100% !important;
+}
+
+html, body, .container, .container > .row, main {
+	height: 100% !important;
 }
 
 .header {
@@ -54,7 +58,6 @@ img {
 	border: 1px solid #ccc;
 	border-radius: 5px;
 	padding: 10px;
-	margin: 5px;
 }
 
 body {
@@ -64,6 +67,10 @@ body {
 main {
 	border-left: 1px solid #ccc;
 	border-right: 1px solid #ccc;
+}
+
+//todo: Sort this hack
+main, main > div {
 	background-color: #fff;
 }
 
