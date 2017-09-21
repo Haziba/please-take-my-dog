@@ -1,3 +1,5 @@
+const passwordHash = require('password-hash');
+
 module.exports = function(app){
   var db = require('./db.js');
 
@@ -88,7 +90,10 @@ module.exports = function(app){
 
   app.post('/api/auth/register', (req, res) => {
   	db.isEmailAvailable(req.body.email)
-  		.then(() => dbResponse(req, res, {carer: db.insert("carer", req.body)}, (req) => { return "Failed to create account" }))
+  		.then(() => {
+			req.body.pass = passwordHash.generate(req.body.pass);
+			return dbResponse(req, res, {carer: db.insert("carer", req.body)}, (req) => { return "Failed to create account" })
+		})
   		.catch((err) => dbFailure(req, res, (req) => { return "Email address in use"; }, err));
   });
 

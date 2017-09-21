@@ -1,5 +1,6 @@
 const fs = require('fs');
 const randomstring = require('randomstring');
+const passwordHash = require('password-hash');
 
 var connect = () => {
 	const pg = require('pg');
@@ -267,9 +268,9 @@ var DB = {
 
 	validateAuthLogin: (authDetails) => {
 		return new Promise((success, failure) => {
-			client.query("select * from carer where email='" + authDetails.email + "' and pass='" + authDetails.pass + "'")
+			client.query("select * from carer where email='" + authDetails.email + "'")
 				.then((data) => {
-					if(data.rows.length > 0){
+					if(data.rows.length > 0 && passwordHash.verify(authDetails.pass, data.rows[0].pass)){
 						let row = parseRow(data.rows[0]);
 
 						row.authtoken = randomstring.generate(50);
