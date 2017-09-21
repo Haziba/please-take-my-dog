@@ -11,12 +11,7 @@ var ViewCarer = React.createClass({
 		var that = this;
 
 		window.Auth.then(function(result){
-			if(!result.authed){
-				location = "/";
-				return;
-			}
-
-			if(that.props.params.id != result.carer.id){
+			if(!result.carer || that.props.params.id != result.carer.id){
 				$.get('/api/carer/' + that.props.params.id).then((carerResult) => {
 					that.setState({loaded: true, carer: carerResult.data.carer, admin: false});
 				});
@@ -39,16 +34,16 @@ var ViewCarer = React.createClass({
 			);
 		}
 
-		let transfers = <div className="row">
-				<div className="col-xs-12">
-					<h3>Transfers</h3>
-
-					{this.state.transfers.map((dog) => <DogTile details={dog} acceptTransfer={this._acceptTransfer} key={`transfer-${dog.id}`} /> )}
-				</div>
-			</div>;
+		let transfers;
 
 		if(this.state.admin){
+			transfers = <div className="row">
+						<div className="col-xs-12">
+							<h3>Transfers</h3>
 
+							{this.state.transfers.map((dog) => <DogTile details={dog} acceptTransfer={this._acceptTransfer} key={`transfer-${dog.id}`} /> )}
+						</div>
+					</div>;
 		}
 
 		return 	<div className="row">
