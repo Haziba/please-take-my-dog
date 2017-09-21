@@ -94,12 +94,14 @@ window.Auth = (function(){
 
 	return new Promise(function(success, failure){
 		if(authTicket){
-			$.post("/api/auth/check", { ticket: authTicket }, function(result){
+			$.post("/api/auth/check", { ticket: authTicket }).then((result) => {
 				if(!result.success){
 					$.cookie("auth", "");
 				}
 
 				success({ authed: result.success, carer: result.data });
+			}).catch((err) => {
+				success({ authed: false });
 			});
 		} else {
 			success({ authed: false });
