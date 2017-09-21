@@ -57,7 +57,7 @@ var Login = React.createClass({
 
 		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, (result) => {
 			if(result.success){
-				var authTicket = $.cookie("auth", result.data.email + ":" + result.data.pass);
+				var authTicket = $.cookie("auth", result.data.email + ":" + result.data.authtoken);
 				location = "/";
 			} else {
 				that.setState({ loggingIn: false, error: result.message });

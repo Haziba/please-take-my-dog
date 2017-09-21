@@ -1,0 +1,1 @@
+ALTER TABLE carer ADD COLUMN authtoken VARCHAR(50);

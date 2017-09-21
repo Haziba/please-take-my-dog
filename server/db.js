@@ -1,4 +1,5 @@
 const fs = require('fs');
+const randomstring = require('randomstring');
 
 var connect = () => {
 	const pg = require('pg');
@@ -76,7 +77,7 @@ var parseRow = (row) => {
 
 var valForSql = (val) => {
 	//todo: Replace this hack
-	if(val == "null" || val == ''){
+	if(typeof(val) == "string" && (val == "null" || val == '')){
 		return "null";
 	}
 
@@ -92,7 +93,7 @@ var valForSql = (val) => {
 var client = connect();
 setupVersion(client);
 
-module.exports = {
+var DB = {
 	all: (table) => {
 		return new Promise((success, failure) => {
 			client.query(`select * from ${table} where deleted=false`)
@@ -247,7 +248,8 @@ module.exports = {
 			}
 
 			let authDetails = authTicket.split(':');
-			client.query("select * from carer where email='" + authDetails[0] + "' and pass='" + authDetails[1] + "'")
+
+			client.query("select * from carer where email='" + authDetails[0] + "' and authtoken='" + authDetails[1] + "'")
 				.then((data) => {
 					if(data.rowCount > 0){
 						let row = parseRow(data.rows[0]);
@@ -270,7 +272,14 @@ module.exports = {
 					if(data.rows.length > 0){
 						let row = parseRow(data.rows[0]);
 
-						success(row);
+						row.authtoken = randomstring.generate(50);
+
+						DB.update('carer', row.id, row).then((result) => {
+							success({email: row.email, authtoken: row.authtoken});
+						}).catch((err) => {
+							console.log("Failed to set authtoken email='" + authDetails.email + "'", err);
+							failure("Server error");
+						});
 					} else {
 						failure("No user was found with that email and password");
 					}
@@ -281,3 +290,5 @@ module.exports = {
 		});
 	}
 };
+
+module.exports = DB;
