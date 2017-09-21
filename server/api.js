@@ -31,7 +31,7 @@ module.exports = function(app){
 
   var dbFailure = (req, res, failureMessage, err) => {
   	console.log(failureMessage(req), err);
-  	res.status(500).send({success: false, message: failureMessage(res)});
+  	res.status(500).send({success: false, message: failureMessage(req)});
   };
 
   let respond = function(method, url, auth, response){
@@ -80,16 +80,16 @@ module.exports = function(app){
 
   require('./api/dogs.js')(app, respond, dbResponse, authCheck, db);
 
-  app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, {carer: db.get("carer", req.params.carerId)}, (req) => { "Failed to get carer `" + req.params.carerId + "`" }));
+  app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, {carer: db.get("carer", req.params.carerId)}, (req) => { return "Failed to get carer `" + req.params.carerId + "`" }));
 
-  app.post('/api/auth/check', (req, res) => dbResponse(req, res, db.validateAuthTicket(req.body.ticket), (req) => { "Failed to authenticate ticket `" + req.body.ticket + "`" }));
+  app.post('/api/auth/check', (req, res) => dbResponse(req, res, db.validateAuthTicket(req.body.ticket), (req) => { return "Failed to authenticate ticket `" + req.body.ticket + "`" }));
 
-  app.post('/api/auth/login', (req, res) => dbResponse(req, res, db.validateAuthLogin(req.body), (req) => { "Failed to authenticate user `" + req.body.email + "`" }));
+  app.post('/api/auth/login', (req, res) => dbResponse(req, res, db.validateAuthLogin(req.body), (req) => { return "Failed to authenticate user `" + req.body.email + "`" }));
 
   app.post('/api/auth/register', (req, res) => {
   	db.isEmailAvailable(req.body.email)
-  		.then(() => dbResponse(req, res, {carer: db.insert("carer", req.body)}, (req) => { "Failed to create account" }))
-  		.catch((err) => dbFailure(req, res, "Email address in use", err));
+  		.then(() => dbResponse(req, res, {carer: db.insert("carer", req.body)}, (req) => { return "Failed to create account" }))
+  		.catch((err) => dbFailure(req, res, (req) => { return "Email address in use"; }, err));
   });
 
   app.get('*', (req, res) => res.render('index.html'));
