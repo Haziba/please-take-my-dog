@@ -33,27 +33,32 @@ var ViewDog = React.createClass({
 			return <div><p>Loading {this.props.params.name}...</p></div>;
 		}
 
-		let adminControls;
+		let controls;
 
 		if(this.state.admin){
 			if(!this.state.dog.transfercarerid){
-				adminControls =
+				controls =
 					<div className="col-xs-6 text-right">
 						<Router.Link to={`/dog/${this.state.dog.id}/edit`} className="btn btn-default">Edit</Router.Link>
 					</div>;
 			} else {
-				adminControls =
+				controls =
 					<div className="col-xs-6 text-right">
 						<button className="btn btn-default" disabled={true}>Transfer in Progress</button>
 					</div>;
 			}
+		} else {
+			controls =
+				<div className="col-xs-6 text-right">
+					<Router.Link to={`/dog/${this.state.dog.id}/request`} className="btn btn-default">Gimme this doggo</Router.Link>
+				</div>;
 		}
 
 		return (
 		<div>
 			<div className="row">
 				<h2 className="col-xs-6">{this.state.dog.name}</h2>
-				{adminControls}
+				{controls}
 			</div>
 
 			<div className="row">
