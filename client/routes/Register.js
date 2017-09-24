@@ -1,4 +1,5 @@
 var React = require('react');
+import Cookies from 'universal-cookie';
 
 var Register = React.createClass({
 	getInitialState: function(){
@@ -90,7 +91,7 @@ var Register = React.createClass({
 
 		$.post("/api/auth/register", {email: this.state.email, pass: this.state.pass, name: this.state.name}, function(result){
 			if(result.success){
-				var authTicket = $.cookie("auth", result.data.carer.email + ":" + result.data.carer.pass);
+				(new Cookies()).set('auth', `${result.data.carer.email}:${result.data.carer.authtoken}`);
 				location = "/";
 			} else {
 				that.setState({ registering: false, error: result.message });

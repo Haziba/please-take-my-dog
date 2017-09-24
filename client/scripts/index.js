@@ -2,6 +2,8 @@ var React = require('react'),
 	Router = require('react-router'),
 	DogQuickList = require('../components/DogQuickList.js');
 
+import Cookies from 'universal-cookie';
+
 var Header = React.createClass({
 	render: function() {
 		return (
@@ -58,7 +60,7 @@ var PageNav = React.createClass({
 	},
 
 	_handleLogOut: function(){
-		$.removeCookie("auth");
+		(new Cookies()).remove('auth');
 
 		this.setState({authed: false});
 		location = "/";
@@ -89,19 +91,18 @@ var App = React.createClass({
 });
 
 window.Auth = (function(){
-	var authTicket = $.cookie("auth");
+	let cookies = new Cookies();
+	var authTicket = cookies.get('auth');
 	var loggedIn = false;
 
 	return new Promise(function(success, failure){
 		if(authTicket){
-			$.post("/api/auth/check", { ticket: authTicket }).then((result) => {
+			$.post("/api/auth/check", { ticket: authTicket }, function(result){
 				if(!result.success){
-					$.cookie("auth", "");
+					cookies.remove('auth');
 				}
 
 				success({ authed: result.success, carer: result.data });
-			}).catch((err) => {
-				success({ authed: false });
 			});
 		} else {
 			success({ authed: false });

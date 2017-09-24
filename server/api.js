@@ -1,4 +1,5 @@
 const passwordHash = require('password-hash');
+const randomstring = require('randomstring');
 
 module.exports = function(app){
   var db = require('./db.js');
@@ -38,7 +39,7 @@ module.exports = function(app){
 
   let respond = function(method, url, auth, response){
     app[method](url, (req, res) => {
-      db.validateAuthTicket(req.cookies.auth).then((carer) => {
+      db.validateAuthTicket(req.universalCookies.get('auth')).then((carer) => {
         auth(req, carer, (authed) => {
           if(authed){
             response(req, res);
@@ -92,6 +93,7 @@ module.exports = function(app){
   	db.isEmailAvailable(req.body.email)
   		.then(() => {
 			req.body.pass = passwordHash.generate(req.body.pass);
+      req.body.authtoken = randomstring.generate(50);
 			return dbResponse(req, res, {carer: db.insert("carer", req.body)}, (req) => { return "Failed to create account" })
 		})
   		.catch((err) => dbFailure(req, res, (req) => { return "Email address in use"; }, err));
