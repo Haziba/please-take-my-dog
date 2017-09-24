@@ -255,6 +255,8 @@ var DB = {
 					if(data.rowCount > 0){
 						let row = parseRow(data.rows[0]);
 
+						console.log("Check", row);
+
 						success(row);
 					} else {
 						failure("Failed to validate auth ticket");
@@ -276,6 +278,7 @@ var DB = {
 						row.authtoken = randomstring.generate(50);
 
 						DB.update('carer', row.id, row).then((result) => {
+							console.log("Woop doop", row);
 							success({email: row.email, authtoken: row.authtoken});
 						}).catch((err) => {
 							console.log("Failed to set authtoken email='" + authDetails.email + "'", err);

@@ -12,7 +12,7 @@ var AddTimeline = React.createClass({
 			that.setState({dog: result.data.dog});
 		});
 
-		Auth.then(function(result){
+		Auth.get().then(function(result){
 			that.setState({loaded: true, carer: result.carer});
 		});
 	},

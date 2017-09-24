@@ -1,13 +1,15 @@
 var React = require('react');
-import Cookies from 'universal-cookie';
+import { withRouter } from 'react-router';
+
+console.log("withRouter", withRouter);
 
 var Login = React.createClass({
 	getInitialState: function(){
-		return { loggingIn: false, email: "", pass: "" };
+		return { loggingIn: false, redirect: false, email: "", pass: "" };
 	},
 
 	render: function() {
-		var error;
+		var error;console.log(this.props.router);
 
 		if(this.state.error){
 			error = <div>{this.state.error}</div>;
@@ -57,9 +59,11 @@ var Login = React.createClass({
 		that.setState({ loggingIn: true });
 
 		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, (result) => {
+			console.log("Login result", result);
 			if(result.success){
-				(new Cookies()).set('auth', `${result.data.email}:${result.data.authtoken}`);
-				location = "/";
+				console.log("Login set cookie", result.data.email, result.data.authtoken);
+				window.Auth.logIn(result.data);
+				browserHistory.push('/');
 			} else {
 				that.setState({ loggingIn: false, error: result.message });
 			}
@@ -69,4 +73,4 @@ var Login = React.createClass({
 	}
 });
 
-module.exports = Login;
+module.exports = withRouter(Login);

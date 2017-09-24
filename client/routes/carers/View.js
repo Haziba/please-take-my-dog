@@ -10,7 +10,7 @@ var ViewCarer = React.createClass({
 	componentWillMount: function(){
 		var that = this;
 
-		window.Auth.then(function(result){
+		window.Auth.get().then(function(result){
 			if(!result.carer || that.props.params.id != result.carer.id){
 				$.get('/api/carer/' + that.props.params.id).then((carerResult) => {
 					that.setState({loaded: true, carer: carerResult.data.carer, admin: false});

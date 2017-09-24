@@ -18,7 +18,7 @@ var PageNav = React.createClass({
 	componentWillMount: function(){
 		var that = this;
 
-		window.Auth.then(function(result){
+		window.Auth.get().then(function(result){
 			that.setState(result);
 		});
 	},
@@ -60,8 +60,7 @@ var PageNav = React.createClass({
 	},
 
 	_handleLogOut: function(){
-		(new Cookies()).remove('auth');
-
+		window.Auth.logOut();
 		this.setState({authed: false});
 		location = "/";
 	}
@@ -93,21 +92,38 @@ var App = React.createClass({
 window.Auth = (function(){
 	let cookies = new Cookies();
 	var authTicket = cookies.get('auth');
+	console.log("Auth open", cookies, authTicket);
 	var loggedIn = false;
 
-	return new Promise(function(success, failure){
-		if(authTicket){
-			$.post("/api/auth/check", { ticket: authTicket }, function(result){
-				if(!result.success){
-					cookies.remove('auth');
-				}
+	return {
+		get: function(){
+			return new Promise(function(success, failure){
+				if(authTicket){
+					$.post("/api/auth/check", { ticket: authTicket }, function(result){
+						if(!result.success){
+							cookies.remove('auth');
+						}
 
-				success({ authed: result.success, carer: result.data });
-			});
-		} else {
-			success({ authed: false });
+						success({ authed: result.success, carer: result.data });
+					});
+				} else {
+					success({ authed: false });
+				}
+			})
+		},
+
+		logIn: function(carer){
+			authTicket = `${carer.email}:${carer.authtoken}`;
+			cookies.set('auth', authTicket, { path: '/', domain: 'localhost:3001/' });
+			console.log(cookies.cookies, cookies.get('auth'));
+			loggedIn = true;
+		},
+
+		logOut: function(){
+			(new Cookies()).remove('auth');
+			loggedIn = false;
 		}
-	});
+	};
 })();
 
 var routes = {
