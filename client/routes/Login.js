@@ -1,7 +1,9 @@
 var React = require('react');
-import Cookies from 'universal-cookie';
+import {Navigation} from 'react-router';
 
 var Login = React.createClass({
+	mixins: [ Navigation ],
+
 	getInitialState: function(){
 		return { loggingIn: false, email: "", pass: "" };
 	},
@@ -58,8 +60,8 @@ var Login = React.createClass({
 
 		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, (result) => {
 			if(result.success){
-				(new Cookies()).set('auth', `${result.data.email}:${result.data.authtoken}`);
-				location = "/";
+				window.Auth.logIn(result.data);
+		    this.transitionTo('/');
 			} else {
 				that.setState({ loggingIn: false, error: result.message });
 			}

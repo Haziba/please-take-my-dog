@@ -19,7 +19,7 @@ var ViewDog = React.createClass({
 			that.setState({ loaded: true, dog: result.data.dog, carer: result.data.carer, admin: admin });
 		});
 
-		window.Auth.then((result) => {
+		window.Auth.get((result) => {
 			let admin;
 			if(that.state.dog){
 				admin = that.state.dog.carerid == result.carer.id;

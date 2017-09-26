@@ -19,7 +19,7 @@ var TransferDog = React.createClass({
 			that.setState({ loaded: true, dog: result.data.dog, carers: result.data.carers, admin: admin });
 		});
 
-		window.Auth.then((result) => {
+		window.Auth.get((result) => {
 			let admin;
 			if(that.state.dog){
 				admin = that.state.dog.carerid == result.carer.id;

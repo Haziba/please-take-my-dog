@@ -91,7 +91,8 @@ var Register = React.createClass({
 
 		$.post("/api/auth/register", {email: this.state.email, pass: this.state.pass, name: this.state.name}, function(result){
 			if(result.success){
-				(new Cookies()).set('auth', `${result.data.carer.email}:${result.data.carer.authtoken}`);
+				console.log("Register set cookie", result.data.carer.email, result.data.carer.authtoken);
+				window.Auth.logIn(result.data.carer);
 				location = "/";
 			} else {
 				that.setState({ registering: false, error: result.message });

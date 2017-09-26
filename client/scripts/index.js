@@ -2,8 +2,6 @@ var React = require('react'),
 	Router = require('react-router'),
 	DogQuickList = require('../components/DogQuickList.js');
 
-import Cookies from 'universal-cookie';
-
 var Header = React.createClass({
 	render: function() {
 		return (
@@ -18,7 +16,7 @@ var PageNav = React.createClass({
 	componentWillMount: function(){
 		var that = this;
 
-		window.Auth.then(function(result){
+		window.Auth.get(function(result){
 			that.setState(result);
 		});
 	},
@@ -60,8 +58,7 @@ var PageNav = React.createClass({
 	},
 
 	_handleLogOut: function(){
-		(new Cookies()).remove('auth');
-
+		window.Auth.logOut();
 		this.setState({authed: false});
 		location = "/";
 	}
@@ -91,23 +88,46 @@ var App = React.createClass({
 });
 
 window.Auth = (function(){
-	let cookies = new Cookies();
-	var authTicket = cookies.get('auth');
+	var authTicket = $.cookie('auth');
+
 	var loggedIn = false;
+	var getters = [];
 
-	return new Promise(function(success, failure){
-		if(authTicket){
-			$.post("/api/auth/check", { ticket: authTicket }, function(result){
-				if(!result.success){
-					cookies.remove('auth');
-				}
+	return {
+		get: function(callback){
+			getters.push(callback);
 
-				success({ authed: result.success, carer: result.data });
-			});
-		} else {
-			success({ authed: false });
+			if(authTicket){
+				$.post("/api/auth/check", { ticket: authTicket }, function(result){
+					if(!result.success){
+						$.cookie('auth', '');
+					}
+
+					callback({ authed: result.success, carer: result.data });
+				}).catch((err) => {
+					$.cookie('auth', '');
+					callback({ authed: false, carer: undefined });
+				});
+			} else {
+				callback({ authed: false });
+			}
+		},
+
+		logIn: function(carer){
+			authTicket = `${carer.email}:${carer.authtoken}`;
+			$.cookie('auth', authTicket);
+			loggedIn = true;
+
+			for(var i = 0; i < getters.length; i++){
+				getters[i]({authed: true, carer: carer});
+			}
+		},
+
+		logOut: function(){
+			$.cookie('auth', '');
+			loggedIn = false;
 		}
-	});
+	};
 })();
 
 var routes = {

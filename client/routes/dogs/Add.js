@@ -9,7 +9,7 @@ var AddDog = React.createClass({
 	componentWillMount: function(){
 		var that = this;
 
-		Auth.then(function(result){
+		Auth.get(function(result){
 			that.setState({loaded: true, carer: result.carer});
 		});
 	},
