@@ -88,7 +88,7 @@ var App = React.createClass({
 });
 
 window.Auth = (function(){
-	var authTicket = $.cookie('auth');
+	var authTicket = $.cookie('dog_auth');
 
 	var loggedIn = false;
 	var getters = [];
@@ -100,12 +100,12 @@ window.Auth = (function(){
 			if(authTicket){
 				$.post("/api/auth/check", { ticket: authTicket }, function(result){
 					if(!result.success){
-						$.cookie('auth', '');
+						$.removeCookie('dog_auth', {path: '/'});
 					}
 
 					callback({ authed: result.success, carer: result.data });
 				}).catch((err) => {
-					$.cookie('auth', '');
+					$.cookie('dog_auth', '');
 					callback({ authed: false, carer: undefined });
 				});
 			} else {
@@ -115,7 +115,7 @@ window.Auth = (function(){
 
 		logIn: function(carer){
 			authTicket = `${carer.email}:${carer.authtoken}`;
-			$.cookie('auth', authTicket);
+			$.cookie('dog_auth', authTicket, {path: '/'});
 			loggedIn = true;
 
 			for(var i = 0; i < getters.length; i++){
@@ -124,7 +124,7 @@ window.Auth = (function(){
 		},
 
 		logOut: function(){
-			$.cookie('auth', '');
+			$.removeCookie('dog_auth', {path: '/'});
 			loggedIn = false;
 		}
 	};

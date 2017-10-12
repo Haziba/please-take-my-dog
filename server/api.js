@@ -42,7 +42,7 @@ module.exports = function(app){
 
   let respond = function(method, url, auth, response){
     app[method](url, (req, res) => {
-      db.validateAuthTicket(req.universalCookies.get('auth')).then((carer) => {
+      db.validateAuthTicket(req.universalCookies.get('dog_auth')).then((carer) => {
         auth(req, carer, (authed) => {
           if(authed){
             response(req, res);
