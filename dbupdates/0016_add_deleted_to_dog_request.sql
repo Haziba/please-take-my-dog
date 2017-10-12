@@ -1,0 +1,1 @@
+ALTER TABLE dog_request ADD COLUMN deleted BOOLEAN NOT NULL DEFAULT(false);

@@ -24,6 +24,4 @@ module.exports = function(app, respond, dbResponse, authCheck, db){
   }, (req, res) => dbResponse(req, res, {request: db.insert('dog_request', req.body)}, (req) => { "Failed to insert request `" + req.body + "`"}));
 
   app.get('/api/dog/:dogId/transfer', (req, res) => dbResponse(req, res, {dog: db.get("dog", req.params.dogId), carers: db.all("carer")}, (req) => { "Failed to get dog `" + req.params.dogId + "` and all carers" }));
-
-  app.get('/api/dogs/:carerId/transfers', (req, res) => dbResponse(req, res, {transfers: db.allFiltered("dog", {transfercarerid: req.params.carerId}, (req) => { "Failed to get transfers `" + req.params.carerId + "`" })}));
 }

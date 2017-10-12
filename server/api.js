@@ -1,5 +1,6 @@
 const passwordHash = require('password-hash');
 const randomstring = require('randomstring');
+const all = require('promise-all');
 
 module.exports = function(app){
   var db = require('./db.js');
@@ -7,7 +8,9 @@ module.exports = function(app){
   var dbResponse = (req, res, dbActions, failureMessage) => {
     let data, promises = [];
 
-    if(Promise.resolve(dbActions) == dbActions){
+    if(typeof(dbActions) == 'function'){
+      promises.push(dbActions());
+    } else if(Promise.resolve(dbActions) == dbActions){
       promises.push(dbActions);
     } else {
       data = dbActions;
@@ -18,7 +21,7 @@ module.exports = function(app){
 
       for(let d in data) {
         (function(d){
-          data[d].then((resp) => { data[d] = resp })
+          (typeof(data[d]) == "function" ? data[d]() : data[d]).then((resp) => { data[d] = resp })
         })(d);
       }
     }
@@ -83,7 +86,27 @@ module.exports = function(app){
 
   require('./api/dogs.js')(app, respond, dbResponse, authCheck, db);
 
-  app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, {carer: db.get("carer", req.params.carerId)}, (req) => { return "Failed to get carer `" + req.params.carerId + "`" }));
+  app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, () => {
+    return new Promise((success, failure) => {
+      db.allForParent("dog", "carer", req.params.carerId).then((dogs) => {
+        all({
+          carer: db.get("carer", req.params.carerId),
+          dogs: dogs,
+          transfers: db.allFiltered("dog", {transfercarerid: req.params.carerId}),
+          requests: db.allFiltered("dog_request", {dogId: dogs.map((dog) => dog.id)})
+        }).then(success);
+      });
+    });
+  }, (req) => { return "Failed to get carer `" + req.params.carerId + "`" }));
+
+  app.get('/api/carer/', (req, res) => dbResponse(req, res, {
+    transfers: db.allFiltered("dog", {transfercarerid: req.params.carerId}, (req) => { "Failed to get transfers `" + req.params.carerId + "`" }),
+    requests: () => {
+      return new Promise((success, failure) => {
+        success([]);
+      });
+    }
+  }));
 
   app.post('/api/auth/check', (req, res) => dbResponse(req, res, db.validateAuthTicket(req.body.ticket), (req) => { return "Failed to authenticate ticket `" + req.body.ticket + "`" }));
 

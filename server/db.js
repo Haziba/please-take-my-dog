@@ -129,14 +129,23 @@ var DB = {
 		for(var prop in filter){
 			if(filters != "")
 				filters += " and ";
-			filters += prop + "='" + filter[prop] + "'";
+
+			if(Array.isArray(filter[prop])){
+				if(filter[prop].length == 0){
+					return Promise.resolve([]);
+				}
+
+				filters += prop + " in ('" + filter[prop].join("','") + "')";
+			} else {
+				filters += prop + "='" + filter[prop] + "'";
+			}
 		}
 
 		return new Promise((success, failure) => {
 			client.query("select * from " + table + " where " + filters)
 				.then((data) => {
 					let rows = data.rows.map((row) => parseRow(row));
-
+					
 					success(rows);
 				}).catch((err) => {
 					console.log("Failed to get table=" + table + ", filters=`" + filters + "`", err);
@@ -255,6 +264,8 @@ var DB = {
 					if(data.rowCount > 0){
 						let row = parseRow(data.rows[0]);
 
+						row.pass = undefined;
+
 						success(row);
 					} else {
 						failure("Failed to validate auth ticket");
@@ -273,10 +284,13 @@ var DB = {
 					if(data.rows.length > 0 && passwordHash.verify(authDetails.pass, data.rows[0].pass)){
 						let row = parseRow(data.rows[0]);
 
+						var oldAuthToken = row.authtoken;
 						row.authtoken = randomstring.generate(50);
 
 						DB.update('carer', row.id, row).then((result) => {
-							success({email: row.email, authtoken: row.authtoken});
+							row.pass = undefined;
+
+							success(row);
 						}).catch((err) => {
 							console.log("Failed to set authtoken email='" + authDetails.email + "'", err);
 							failure("Server error");

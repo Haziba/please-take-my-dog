@@ -4,25 +4,25 @@ var 	React 	= require('react'),
 
 var ViewCarer = React.createClass({
 	getInitialState: function(){
-		return { loaded: false };
+		return { loaded: false, transfers: [], requests: [] };
 	},
 
 	componentWillMount: function(){
 		var that = this;
 
 		window.Auth.get(function(result){
-			console.log(result);
-			if(!result.carer || that.props.params.id != result.carer.id){
-				$.get('/api/carer/' + that.props.params.id).then((carerResult) => {
-					that.setState({loaded: true, carer: carerResult.data.carer, admin: false});
+			$.get('/api/carer/' + that.props.params.id).then((carerResult) => {
+				that.setState({
+					loaded: true,
+
+					carer: carerResult.data.carer,
+					requests: carerResult.data.requests,
+					transfers: carerResult.data.transfers,
+					//todo: Hand this into DogGrid
+					dogs: carerResult.data.dogs,
+
+					admin: that.props.params.id == result.carer.id
 				});
-				return;
-			}
-
-			that.setState({carer: result.carer, admin: true});
-
-			$.get('/api/dogs/' + result.carer.id + '/transfers/').then((transfersResult) => {
-				that.setState({loaded: true, transfers: transfersResult.data.transfers});
 			});
 		});
 	},
@@ -35,16 +35,29 @@ var ViewCarer = React.createClass({
 			);
 		}
 
-		let transfers;
+		let transfers, requests;
 
 		if(this.state.admin){
-			transfers = <div className="row">
-						<div className="col-xs-12">
-							<h3>Transfers</h3>
+			if(this.state.transfers.length > 0){
+				transfers = <div className="row">
+							<div className="col-xs-12">
+								<h3>Transfers</h3>
 
-							{this.state.transfers.map((dog) => <DogTile details={dog} acceptTransfer={this._acceptTransfer} key={`transfer-${dog.id}`} /> )}
-						</div>
-					</div>;
+								{this.state.transfers.map((dog) => <DogTile details={dog} acceptTransfer={this._acceptTransfer} key={`transfer-${dog.id}`} /> )}
+							</div>
+						</div>;
+			}
+
+			if(this.state.requests.length > 0){
+				console.log(this.state.requests);
+				requests = <div className="row">
+							<div className="col-xs-12">
+								<h3>Requests</h3>
+
+								{this.state.requests.map((request) => <DogTile details={this.state.dogs.find((dog) => request.dogid == dog.id)} viewRequest={this._viewRequest} key={`request-${request.carerid}-${request.dogid}`} /> )}
+							</div>
+						</div>;
+			}
 		}
 
 		return 	<div className="row">
@@ -52,6 +65,8 @@ var ViewCarer = React.createClass({
 					<h2>{this.state.carer.name}</h2>
 
 					{transfers}
+
+					{requests}
 
 					<h3>{this.state.carer.name}'s Dogs</h3>
 					<DogGrid admin={this.state.admin} carerId={this.state.carer.id} key={this.state.carer.id}/>

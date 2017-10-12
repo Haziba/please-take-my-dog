@@ -11,6 +11,7 @@ var RequestDog = React.createClass({
 
 		$.get("/api/dog/" + this.props.params.id).then(function(result){
 			let admin = false;
+
 			if(that.state.self){
 				admin = that.state.self.id == result.data.dog.carerid;
 			}
