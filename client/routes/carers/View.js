@@ -1,6 +1,7 @@
 var 	React 	= require('react'),
 	DogTile = require('../../components/DogTile.js'),
-	DogGrid = require('../../components/DogGrid.js');
+	DogGrid = require('../../components/DogGrid.js'),
+	ImageHelper = require('../../helpers/ImageHelper.js');
 
 var ViewCarer = React.createClass({
 	getInitialState: function(){
@@ -28,7 +29,6 @@ var ViewCarer = React.createClass({
 	},
 
 	render: function() {
-		console.log(this.state);
 		if(!this.state.loaded){
 			return (
 				<p>Loading account...</p>
@@ -62,7 +62,14 @@ var ViewCarer = React.createClass({
 
 		return 	<div className="row">
 				<div className="col-xs-12">
-					<h2>{this.state.carer.name}</h2>
+					<div className="row">
+						<div className="col-md-2 col-sm-3 col-xs-4">
+							{ImageHelper.Image(this.state.carer.avatar)}
+						</div>
+						<div className="col-md-10 col-sm-9 col-xs-8">
+							<h2>{this.state.carer.name}</h2>
+						</div>
+					</div>
 
 					{transfers}
 

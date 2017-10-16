@@ -142,6 +142,7 @@ var routes = {
 	Login: require('../routes/Login'),
 	Register: require('../routes/Register'),
 	ViewCarer: require('../routes/carers/View'),
+	EditCarer: require('../routes/carers/Edit'),
 };
 
 var routes = (
@@ -158,6 +159,7 @@ var routes = (
 		<Router.Route name="dogAddTimeline" path="/dogs/:dogId/timeline/add" handler={routes.DogAddTimeline}/>
 
 		<Router.Route name="viewCarer" path="/carer/:id" handler={routes.ViewCarer}/>
+		<Router.Route name="editCarer" path="/carer/:id/edit" handler={routes.EditCarer}/>
 
 		<Router.Route name="login" path="/login" handler={routes.Login}/>
 		<Router.Route name="register" path="/register" handler={routes.Register}/>

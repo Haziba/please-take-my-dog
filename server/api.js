@@ -86,6 +86,7 @@ module.exports = function(app){
 
   require('./api/dogs.js')(app, respond, dbResponse, authCheck, db);
 
+  //todo: Move carer stuff to it's own file
   app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, () => {
     return new Promise((success, failure) => {
       db.allForParent("dog", "carer", req.params.carerId).then((dogs) => {
@@ -107,6 +108,10 @@ module.exports = function(app){
       });
     }
   }));
+
+  respond('put', '/api/carer/:carerId', (req, carer, callback) => {
+    callback(authCheck.loggedInAs(carer, req.params.carerId));
+  }, (req, res) => dbResponse(req, res, db.update("carer", req.params.carerId, req.body.carer), (req) => "Failed to update carer `" + req.params.carerId + "`"));
 
   app.post('/api/auth/check', (req, res) => dbResponse(req, res, db.validateAuthTicket(req.body.ticket), (req) => { return "Failed to authenticate ticket `" + req.body.ticket + "`" }));
 
