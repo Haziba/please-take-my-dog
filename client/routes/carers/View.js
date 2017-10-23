@@ -1,7 +1,8 @@
 var 	React 	= require('react'),
 	DogTile = require('../../components/DogTile.js'),
 	DogGrid = require('../../components/DogGrid.js'),
-	ImageHelper = require('../../helpers/ImageHelper.js');
+	ImageHelper = require('../../helpers/ImageHelper.js'),
+	DogRequestTile = require('../../components/DogRequestTile.js');
 
 var ViewCarer = React.createClass({
 	getInitialState: function(){
@@ -18,6 +19,7 @@ var ViewCarer = React.createClass({
 
 					carer: carerResult.data.carer,
 					requests: carerResult.data.requests,
+					requestCarers: carerResult.data.requestCarers,
 					transfers: carerResult.data.transfers,
 					//todo: Hand this into DogGrid
 					dogs: carerResult.data.dogs,
@@ -54,7 +56,7 @@ var ViewCarer = React.createClass({
 							<div className="col-xs-12">
 								<h3>Requests</h3>
 
-								{this.state.requests.map((request) => <DogTile details={this.state.dogs.find((dog) => request.dogid == dog.id)} viewRequest={this._viewRequest} key={`request-${request.carerid}-${request.dogid}`} /> )}
+								{this.state.requests.map((request) => <DogRequestTile dog={this.state.dogs.find((dog) => request.dogid == dog.id)} carer={this.state.requestCarers.find((carer) => request.carerid == carer.id)} request={request} key={`request-${request.id}`} /> )}
 							</div>
 						</div>;
 			}

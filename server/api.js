@@ -90,12 +90,15 @@ module.exports = function(app){
   app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, () => {
     return new Promise((success, failure) => {
       db.allForParent("dog", "carer", req.params.carerId).then((dogs) => {
-        all({
-          carer: db.get("carer", req.params.carerId),
-          dogs: dogs,
-          transfers: db.allFiltered("dog", {transfercarerid: req.params.carerId}),
-          requests: db.allFiltered("dog_request", {dogId: dogs.map((dog) => dog.id)})
-        }).then(success);
+        db.allFiltered("dog_request", {dogId: dogs.map((dog) => dog.id)}).then((requests) => {
+          all({
+            carer: db.get("carer", req.params.carerId),
+            dogs: dogs,
+            transfers: db.allFiltered("dog", {transfercarerid: req.params.carerId}),
+            requests: requests,
+            requestCarers: db.allFiltered("carer", {id: requests.map((request) => request.carerid)}),
+          }).then(success);
+        })
       });
     });
   }, (req) => { return "Failed to get carer `" + req.params.carerId + "`" }));

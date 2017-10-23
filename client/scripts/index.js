@@ -132,26 +132,33 @@ window.Auth = (function(){
 
 var routes = {
 	Home: require('../routes/Home'),
+
 	ViewDogs: require('../routes/dogs/Index'),
 	ViewDog: require('../routes/dogs/View'),
 	AddDog: require('../routes/dogs/Add'),
 	EditDog: require('../routes/dogs/Edit'),
 	TransferDog: require('../routes/dogs/Transfer'),
-	RequestDog: require('../routes/dogs/Request'),
 	DogAddTimeline: require('../routes/dogs/timeline/Add'),
+
 	Login: require('../routes/Login'),
 	Register: require('../routes/Register'),
+
 	ViewCarer: require('../routes/carers/View'),
 	EditCarer: require('../routes/carers/Edit'),
+
+	AddRequest: require('../routes/requests/Add'),
+	ViewRequest: require('../routes/requests/View'),
 };
 
 var routes = (
 	<Router.Route name="app" path="/" handler={App}>
 		<Router.Route name="home" path="/" handler={routes.Home}/>
 
+		<Router.Route name="addRequest" path="/dog/:dogid/request" handler={routes.AddRequest}/>
+		<Router.Route name="viewRequest" path="/request/:id" handler={routes.ViewRequest}/>
+
 		<Router.Route name="viewDogs" path="/dogs" handler={routes.ViewDogs}/>
 		<Router.Route name="transferDog" path="/dog/:id/transfer" handler={routes.TransferDog}/>
-		<Router.Route name="requestDog" path="/dog/:id/request" handler={routes.RequestDog}/>
 		<Router.Route name="editDog" path="/dog/:id/edit" handler={routes.EditDog}/>
 		<Router.Route name="viewDog" path="/dog/:id/:name" handler={routes.ViewDog}/>
 		<Router.Route name="addDog" path="/dogs/add" handler={routes.AddDog}/>

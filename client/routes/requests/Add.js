@@ -1,15 +1,19 @@
 var React = require('react'),
 	Router = require('react-router');
 
-var RequestDog = React.createClass({
+var AddRequest = React.createClass({
 	getInitialState: function(){
-		return { loaded: false, posting: false, form: {} };
+		return { loaded: false, posting: false, request: {
+			dogid: this.props.params.dogid,
+			form: {},
+			occurredOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
+		}};
 	},
 
 	componentWillMount: function(){
 		var that = this;
 
-		$.get("/api/dog/" + this.props.params.id).then(function(result){
+		$.get("/api/dog/" + this.props.params.dogid).then(function(result){
 			let admin = false;
 
 			if(that.state.self){
@@ -23,7 +27,11 @@ var RequestDog = React.createClass({
 			if(that.state.dog){
 				admin = that.state.dog.carerid == result.carer.id;
 			}
-			that.setState({ self: result.carer, admin: admin });
+
+			var request = that.state.request;
+			request.carerid = result.carer.id;
+
+			that.setState({ self: result.carer, request: request, admin: admin });
 		});
 	},
 
@@ -74,7 +82,7 @@ var RequestDog = React.createClass({
 	},
 
 	handleChange: function(e){
-		var change = this.state.form;
+		var change = this.state.request.form;
 
 		change[e.target.name] = e.target.value;
 
@@ -89,12 +97,7 @@ var RequestDog = React.createClass({
 
 		$.ajax({
 			url: `/api/dog/${this.state.dog.id}/request`,
-			data: {
-				carerid: this.state.self.id,
-				dogid: this.props.params.id,
-				form: this.state.form,
-				occurredOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
-			},
+			data: this.state.request,
 			type: 'POST',
 		}).then(function(result){
 			if(result.success){
@@ -107,4 +110,4 @@ var RequestDog = React.createClass({
 	}
 });
 
-module.exports = RequestDog;
+module.exports = AddRequest;
