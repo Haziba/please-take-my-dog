@@ -19,9 +19,5 @@ module.exports = function(app, respond, dbResponse, authCheck, db){
     callback(authCheck.loggedIn(carer) && req.body.carerid == carer.id)
   }, (req, res) => dbResponse(req, res, {dog: db.insert('dog', req.body)}, (req) => { "Failed to insert dog `" + req.body + "`" }));
 
-  respond('post', '/api/dog/:dogId/request', (req, carer, callback) => {
-    callback(authCheck.loggedIn(carer));
-  }, (req, res) => dbResponse(req, res, {request: db.insert('dog_request', req.body)}, (req) => { "Failed to insert request `" + req.body + "`"}));
-
   app.get('/api/dog/:dogId/transfer', (req, res) => dbResponse(req, res, {dog: db.get("dog", req.params.dogId), carers: db.all("carer")}, (req) => { "Failed to get dog `" + req.params.dogId + "` and all carers" }));
 }

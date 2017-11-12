@@ -85,6 +85,7 @@ module.exports = function(app){
   }
 
   require('./api/dogs.js')(app, respond, dbResponse, authCheck, db);
+  require('./api/requests.js')(app, respond, dbResponse, authCheck, db);
 
   //todo: Move carer stuff to it's own file
   app.get('/api/carer/:carerId', (req, res) => dbResponse(req, res, () => {
