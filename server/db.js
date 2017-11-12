@@ -82,13 +82,7 @@ var valForSql = (val) => {
 		return "null";
 	}
 
-	//todo: Make a more robust check, for the moment json is the only object we'd save tho
-	var isJson = typeof(val) == "object";
-	if(isJson){
-		return `'${JSON.stringify(val)}'::JSON`;
-	} else {
-		return `'${val}'`;
-	}
+	return val;
 }
 
 var client = connect();
@@ -186,13 +180,15 @@ var DB = {
 		return new Promise((success, failure) => {
 			let cols = [];
 			let vals = [];
+			let placeholders = "";
 
 			for(let prop in obj){
 				cols.push(prop);
 				vals.push(valForSql(obj[prop]));
+				placeholders += (placeholders.length > 0 ? ',' : '') + `$${vals.length}`;
 			}
-
-			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + vals.join(",") + ")")
+			
+			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + placeholders + ")", vals)
 				.then((data) => success(obj)).catch((err) => {
 					console.log("Failed to insert " + table, err);
 					failure("Insert failed");
