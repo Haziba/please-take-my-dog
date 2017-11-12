@@ -1,21 +1,20 @@
-var React = require('react'),
-  Image = require('cloudinary-react').Image;
+var React = require('react');
 
 import ImageGallery from 'react-image-gallery';
 
 var ImageHelper = {
-  Image: function(image){
+  Image: function(image, opts){
     if(!image)
       return;
 
-    return <Image cloudName={'haziba'} publicId={image.public_id}></Image>;
+    return <img src={ImageHelper.CloudinaryImageUrl(image, opts)} />;
   },
 
-  FirstImage: function(images){
+  FirstImage: function(images, opts){
     if(!images || images.length < 1)
       return;
 
-    return ImageHelper.Image(images[0]);
+    return ImageHelper.Image(images[0], opts);
   },
 
   Gallery: function(galleryImages){
@@ -39,6 +38,8 @@ var ImageHelper = {
         filters += 'c_lpad,h_400,w_500';
       } else if(opts.tile_size){
         filters += 'c_lpad,h_250,w_250';
+      } else if(opts.request_size){
+        filters += 'c_lpad,h_500,w_600';
       }
     }
 
