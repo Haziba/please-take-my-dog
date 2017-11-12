@@ -5,7 +5,18 @@ var AddRequest = React.createClass({
 	getInitialState: function(){
 		return { loaded: false, posting: false, request: {
 			dogid: this.props.params.dogid,
-			form: {},
+			form: {
+				questions: {
+					'livingSituation': {
+						q: 'What\'s Your Living Situation:',
+						a: ''
+					},
+						'doYouLikeDogs': {
+							q: 'Do you like dogs:',
+							a: ''
+						}
+				}
+			},
 			occurredOn: new Date().toISOString().slice(0, 19).replace('T', ' ')
 		}};
 	},
@@ -48,6 +59,19 @@ var AddRequest = React.createClass({
 			error = <div>{this.state.error}</div>;
 		}
 
+		let questions = [];
+
+		for(let q in this.state.request.form.questions){
+			let question = this.state.request.form.questions[q];
+			questions.push(<div className="form-group">
+						<label className="control-label col-sm-2" htmlFor={q}>{question.q}</label>
+						<div className="col-sm-10">
+							<textarea className="form-control question" name={q} onChange={this.handleChange} disabled={this.state.posting}>
+							</textarea>
+						</div>
+					</div>)
+		}
+
 		return (
 			<div>
 				<h2>Transfer {this.state.dog.name}</h2>
@@ -58,18 +82,12 @@ var AddRequest = React.createClass({
 					<div className="form-group">
 						<label className="control-label col-sm-2" htmlFor="requestType">Request Type:</label>
 						<div className="col-sm-10">
-							<label className="radio-inline"><input type="radio" name="requestType" onChange={this.handleChange} disabled={this.state.posting} />Adopt</label>
-							<label className="radio-inline"><input type="radio" name="requestType" onChange={this.handleChange} disabled={this.state.posting} />Foster</label>
+							<label className="radio-inline"><input type="radio" name="requestType" onChange={this.handleChange} disabled={this.state.posting} value="adopt" />Adopt</label>
+							<label className="radio-inline"><input type="radio" name="requestType" onChange={this.handleChange} disabled={this.state.posting} value="foster" />Foster</label>
 						</div>
 					</div>
 
-					<div className="form-group">
-						<label className="control-label col-sm-2" htmlFor="livingSituation">What's Your Living Situation:</label>
-						<div className="col-sm-10">
-							<textarea className="form-control" name="livingSituation" onChange={this.handleChange} disabled={this.state.posting}>
-							</textarea>
-						</div>
-					</div>
+					{questions}
 
 					<div className="form-group">
 						<div className="col-sm-10 col-sm-offset-2">
@@ -84,7 +102,11 @@ var AddRequest = React.createClass({
 	handleChange: function(e){
 		var change = this.state.request.form;
 
-		change[e.target.name] = e.target.value;
+		if(e.target.classList.contains('question')){
+			change.questions[e.target.name].a = e.target.value;
+		} else {
+			change[e.target.name] = e.target.value;
+		}
 
 		this.setState({form: change});
 	},
