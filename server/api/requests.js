@@ -1,7 +1,8 @@
 const all = require('promise-all');
+const db = require('../db.js');
 
-module.exports = function(app, respond, dbResponse, authCheck, db){
-  app.get('/api/request/:requestId', (req, res) => dbResponse(req, res, () => {
+module.exports = function(app, respond, apiCall, authCheck){
+  app.get('/api/request/:requestId', (req, res) => apiCall.db(req, res, () => {
     return new Promise((success, failure) => {
       db.get("dog_request", req.params.requestId).then((request) => {
         all({
@@ -15,5 +16,5 @@ module.exports = function(app, respond, dbResponse, authCheck, db){
 
   respond('post', '/api/dog/:dogId/request', (req, carer, callback) => {
     callback(authCheck.loggedIn(carer));
-  }, (req, res) => dbResponse(req, res, {request: db.insert('dog_request', req.body)}, (req) => { "Failed to insert request `" + req.body + "`"}));
+  }, (req, res) => apiCall.db(req, res, {request: db.insert('dog_request', req.body)}, (req) => { "Failed to insert request `" + req.body + "`"}));
 }

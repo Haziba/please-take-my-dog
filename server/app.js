@@ -7,7 +7,7 @@ var babelify = require('babelify');
 var browserify = require('browserify-middleware');
 var config = require('../client/config');
 
-module.exports = function(){
+module.exports = function(bus, db){
   var app = express();
   app.use(cookiesMiddleware());
 

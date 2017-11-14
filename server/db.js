@@ -105,7 +105,14 @@ var DB = {
 
 	get: (table, id) => {
 		return new Promise((success, failure) => {
-			client.query("select * from " + table + " where id=" + id)
+			if(typeof(id) == "object"){
+				let idName = Object.keys(id)[0];
+				id = `${idName}='${id[idName]}'`;
+			} else {
+				id = `id=${id}`;
+			}
+
+			client.query("select * from " + table + " where " + id)
 				.then((data) => {
 					let row = parseRow(data.rows[0]);
 
@@ -114,6 +121,19 @@ var DB = {
 					console.log("Failed to get table=" + table + ", id=" + id, err);
 					failure("Server error");
 				});
+		});
+	},
+
+	getEntity: (klass, id) => {
+		return DB.get(klass.name.toLowerCase(), id).then((row) => {
+			var k = new klass(row);
+
+			//console.log(k);
+
+			k.SetBreed("foxhound");
+			//console.log(k);
+
+			return k;
 		});
 	},
 
@@ -139,7 +159,7 @@ var DB = {
 			client.query("select * from " + table + " where " + filters)
 				.then((data) => {
 					let rows = data.rows.map((row) => parseRow(row));
-					
+
 					success(rows);
 				}).catch((err) => {
 					console.log("Failed to get table=" + table + ", filters=`" + filters + "`", err);
@@ -187,7 +207,7 @@ var DB = {
 				vals.push(valForSql(obj[prop]));
 				placeholders += (placeholders.length > 0 ? ',' : '') + `$${vals.length}`;
 			}
-			
+
 			client.query("insert into " + table + "(" + cols.join(",") + ") VALUES(" + placeholders + ")", vals)
 				.then((data) => success(obj)).catch((err) => {
 					console.log("Failed to insert " + table, err);
@@ -199,15 +219,30 @@ var DB = {
 		});
 	},
 
+	upsertEntity: (saveableEntity) => {
+		return new Promise((success, failure) => {
+			client.query("insert into entity(uuid, entitytype, data, totaleventsapplied) VALUES($1, $2, $3, $4) ON CONFLICT (uuid) DO UPDATE SET data=$3, totaleventsapplied=$4", [saveableEntity.uuid, saveableEntity.entityType, saveableEntity.data, saveableEntity.totalEventsApplied])
+				.then((data) => success(data)).catch((err) => {
+					console.log("Failed to upsert entity " + saveableEntity, err);
+					failure("Insert failed");
+				}).catch((err) => {
+					console.log("Failed to upsert entity " + saveableEntity);
+					failure("Server error");
+				});
+		});
+	},
+
 	update: (table, objId, obj) => {
 		return new Promise((success, failure) => {
 			let sets = [];
+			let vals = [];
 
 			for(let prop in obj){
-				sets.push(`${prop}=${valForSql(obj[prop])}`);
+				sets.push(`${prop}=$${sets.length+1}`);
+				vals.push(valForSql(obj[prop]));
 			}
 
-			client.query("update " + table + " set " + sets.join(', ') + " where id=" + objId)
+			client.query("update " + table + " set " + sets.join(', ') + " where id=" + objId, vals)
 				.then((data) => success(obj)).catch((err) => {
 					console.log("Failed to update " + table, err);
 					failure("Update failed");

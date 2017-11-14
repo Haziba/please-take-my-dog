@@ -17,6 +17,7 @@ var DogGrid = React.createClass({
 		}
 
 		$.get(url, (result) => {
+			console.log(result.data.dogs);
 			that.setState({loaded: true, dogs: result.data.dogs});
 		});
 	},

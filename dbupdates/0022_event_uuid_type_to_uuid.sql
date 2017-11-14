@@ -1,0 +1,3 @@
+TRUNCATE event;
+ALTER TABLE event DROP COLUMN uuid;
+ALTER TABLE event ADD COLUMN uuid uuid NOT NULL;
