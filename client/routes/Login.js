@@ -5,7 +5,7 @@ var Login = React.createClass({
 	mixins: [ Navigation ],
 
 	getInitialState: function(){
-		return { loggingIn: false, email: "", pass: "" };
+		return { loggingIn: false, email: "", password: "" };
 	},
 
 	render: function() {
@@ -28,9 +28,9 @@ var Login = React.createClass({
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-sm-2" htmlFor="pass">Password:</label>
+						<label className="control-label col-sm-2" htmlFor="password">Password:</label>
 						<div className="col-xs-10">
-							<input type="password" name="pass" className="form-control" value={this.state.pass} onChange={this.handleChange} disabled={this.state.loggingIn} />
+							<input type="password" name="password" className="form-control" value={this.state.password} onChange={this.handleChange} disabled={this.state.loggingIn} />
 						</div>
 					</div>
 
@@ -58,7 +58,7 @@ var Login = React.createClass({
 
 		that.setState({ loggingIn: true });
 
-		$.post("/api/auth/login", {email: this.state.email, pass: this.state.pass}, (result) => {
+		$.post("/api/auth/login", {email: this.state.email, password: this.state.password}, (result) => {
 			if(result.success){
 				window.Auth.logIn(result.data);
 		    this.transitionTo('/');

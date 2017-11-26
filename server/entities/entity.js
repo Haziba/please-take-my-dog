@@ -25,7 +25,7 @@ module.exports = class Entity {
   }
 
   applyEvent(event){
-    this[`_on${event.type}`](event.body);
+    this[`_on${event.type}`](event.body || {});
   }
 
   save(){
@@ -96,6 +96,37 @@ module.exports = class Entity {
           success(entities.map(e => new entityClass(e)));
         });
       })
+    });
+  }
+
+  static loadBy(entityClass, filters){
+    return new Promise((success, failure) => {
+      Entity.loadAll(entityClass).then((entities => {
+        entities = entities.map(e => new entityClass(e));
+
+        var filteredEntities = entities.filter(e => {
+          for(var key in filters){
+            if(e[key] != filters[key]){
+              return false;
+            }
+          }
+          return true;
+        });
+
+        success(filteredEntities);
+      }));
+    });
+  }
+
+  static loadMany(entityClass, ids){
+    return new Promise((success, failure) => {
+      Entity.loadAll(entityClass).then((entities => {
+        entities = entities.map(e => new entityClass(e));
+
+        var filteredEntities = entities.filter(e => ids.indexOf(e.id) >= 0);
+
+        success(filteredEntities);
+      }));
     });
   }
 

@@ -6,9 +6,6 @@ module.exports = function(app, respond, apiCall, authCheck){
 
   app.get('/api/dogs/quicklist', (req, res) => apiCall.db(req, res, {all: Dog.promiseForClient(Dog.loadAll())}, (req) => { "Failed to get quicklist dogs" }));
 
-  //todo: Get carer's dog ids from carer
-  app.get('/api/dogs/:carerId', (req, res) => apiCall.db(req, res, {dogs: db.allForParent("dog", "carer", req.params.carerId)}, (req) => { "Failed to get dogs for carer `" + req.params.carerId + "`" }));
-
   app.get('/api/dog/:dogId', (req, res) => apiCall.db(req, res, {dog: Dog.promiseForClient(Dog.load(req.params.dogId)), carer: db.getByChild("carer", "dog", req.params.dogId)}, (req) => { "Failed to get dog `" + req.params.dogId + "`" }));
 
   respond('put', '/api/dog/:dogId', (req, carer, callback) => {

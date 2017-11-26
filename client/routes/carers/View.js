@@ -78,7 +78,7 @@ var ViewCarer = React.createClass({
 					{requests}
 
 					<h3>{this.state.carer.name}'s Dogs</h3>
-					<DogGrid admin={this.state.admin} carerId={this.state.carer.id} key={this.state.carer.id}/>
+					<DogGrid admin={this.state.admin} carerId={this.state.carer.id} dogs={this.state.dogs} key={this.state.carer.id}/>
 				</div>;
 			</div>;
 	},

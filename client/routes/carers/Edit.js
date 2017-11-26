@@ -40,7 +40,7 @@ var EditCarer = React.createClass({
 			error = <div>{this.state.error}</div>;
 		}
 
-		let image = (this.state.carer.avatar ? 
+		let image = (this.state.carer.avatar ?
 			<div className="col-xs-2">
 				{ImageHelper.Image(image)}
 				<button className="btn btn-xs btn-danger" onClick={(e) => this._handleImageRemoval(e, image)}>Remove</button>
@@ -88,9 +88,7 @@ var EditCarer = React.createClass({
 	},
 
 	handleChange: function(e){
-		console.log("Test");
 		let change = this.state.carer;
-		console.log("Testo");
 
 		change[e.target.name] = e.target.value;
 

@@ -105,7 +105,7 @@ window.Auth = (function(){
 
 					callback({ authed: result.success, carer: result.data });
 				}).catch((err) => {
-					$.cookie('dog_auth', '');
+					//$.cookie('dog_auth', '');
 					callback({ authed: false, carer: undefined });
 				});
 			} else {
@@ -114,7 +114,7 @@ window.Auth = (function(){
 		},
 
 		logIn: function(carer){
-			authTicket = `${carer.email}:${carer.authtoken}`;
+			authTicket = `${carer.id}:${carer.authToken}`;
 			$.cookie('dog_auth', authTicket, {path: '/'});
 			loggedIn = true;
 

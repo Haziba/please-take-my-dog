@@ -2,7 +2,7 @@ var React = require('react');
 
 var Register = React.createClass({
 	getInitialState: function(){
-		return { registering: false, email: "", pass: "", name: "", confirmPass: "" };
+		return { registering: false, email: "", password: "", name: "", confirmPassword: "" };
 	},
 
 	render: function() {
@@ -32,16 +32,16 @@ var Register = React.createClass({
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-xs-2" htmlFor="pass">Password:</label>
+						<label className="control-label col-xs-2" htmlFor="password">Password:</label>
 						<div className="col-xs-10">
-							<input type="password" name="pass" className="form-control" value={this.state.pass} onChange={this.handleChange} disabled={this.state.registering} />
+							<input type="password" name="password" className="form-control" value={this.state.password} onChange={this.handleChange} disabled={this.state.registering} />
 						</div>
 					</div>
 
 					<div className="form-group">
-						<label className="control-label col-xs-2" htmlFor="confirmPass">Confirm Password:</label>
+						<label className="control-label col-xs-2" htmlFor="confirmPassword">Confirm Password:</label>
 						<div className="col-xs-10">
-							<input type="password" name="confirmPass" className="form-control" value={this.state.confirmPass} onChange={this.handleChange} disabled={this.state.registering} />
+							<input type="password" name="confirmPassword" className="form-control" value={this.state.confirmPassword} onChange={this.handleChange} disabled={this.state.registering} />
 						</div>
 					</div>
 
@@ -78,17 +78,17 @@ var Register = React.createClass({
 			return;
 		}
 
-		if(this.state.pass.length == 0){
+		if(this.state.password.length == 0){
 			that.setState({ registering: false, error: "Email invalid" });
 			return;
 		}
 
-		if(this.state.pass != this.state.confirmPass){
+		if(this.state.password != this.state.confirmPassword){
 			that.setState({ registering: false, error: "Passwords do not match" });
 			return;
 		}
 
-		$.post("/api/auth/register", {email: this.state.email, pass: this.state.pass, name: this.state.name}, function(result){
+		$.post("/api/auth/register", {email: this.state.email, password: this.state.password, name: this.state.name}, function(result){
 			if(result.success){
 				window.Auth.logIn(result.data.carer);
 				location = "/";

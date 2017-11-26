@@ -280,61 +280,6 @@ var DB = {
 			});
 		});
 	},
-
-	validateAuthTicket: (authTicket) => {
-		return new Promise((success, failure) => {
-			if(!authTicket || authTicket.indexOf(':') < 0){
-				failure("Invalid auth ticket");
-				return;
-			}
-
-			let authDetails = authTicket.split(':');
-
-			client.query("select * from carer where email='" + authDetails[0] + "' and authtoken='" + authDetails[1] + "'")
-				.then((data) => {
-					if(data.rowCount > 0){
-						let row = parseRow(data.rows[0]);
-
-						row.pass = undefined;
-
-						success(row);
-					} else {
-						failure("Failed to validate auth ticket");
-					}
-				}).catch((err) => {
-					console.log("Failed to validate auth ticket authDetails", err);
-					failure("Server error");
-				});
-		});
-	},
-
-	validateAuthLogin: (authDetails) => {
-		return new Promise((success, failure) => {
-			client.query("select * from carer where email='" + authDetails.email + "'")
-				.then((data) => {
-					if(data.rows.length > 0 && passwordHash.verify(authDetails.pass, data.rows[0].pass)){
-						let row = parseRow(data.rows[0]);
-
-						var oldAuthToken = row.authtoken;
-						row.authtoken = randomstring.generate(50);
-
-						DB.update('carer', row.id, row).then((result) => {
-							row.pass = undefined;
-
-							success(row);
-						}).catch((err) => {
-							console.log("Failed to set authtoken email='" + authDetails.email + "'", err);
-							failure("Server error");
-						});
-					} else {
-						failure("No user was found with that email and password");
-					}
-				}).catch((err) => {
-					console.log("Failed to validate auth login email='" + authDetails.email + "'", err);
-					failure("Server error");
-				});
-		});
-	}
 };
 
 module.exports = DB;

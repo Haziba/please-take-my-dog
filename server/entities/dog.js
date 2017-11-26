@@ -83,4 +83,8 @@ module.exports = class Dog extends Entity {
   static loadAll(){
     return Entity.loadAll(Dog);
   }
+
+  static loadMany(ids){
+    return Entity.loadMany(Dog, ids);
+  }
 }
