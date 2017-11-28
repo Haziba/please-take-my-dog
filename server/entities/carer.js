@@ -10,8 +10,8 @@ const Carer = class Carer extends Entity {
     var data = props.data || {};
     this.name = data.name;
     this.email = data.email;
-    this.password = data.password;
-    this.authToken = data.authToken;
+    this._password = data._password;
+    this._authToken = data._authToken;
     this.avatar = data.avatar;
     this.dogs = data.dogs || [];
 
@@ -36,7 +36,7 @@ const Carer = class Carer extends Entity {
   _onCreate(body){
     this.name = body.name;
     this.email = body.email;
-    this.password = body.password;
+    this._password = body._password;
   }
 
   AddDog(dogId){

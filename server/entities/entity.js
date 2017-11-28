@@ -58,7 +58,8 @@ const Entity = class Entity {
     var obj = {id: this.uuid};
 
     for(let key of this.dataKeys())
-      obj[key] = this[key];
+      if(key[0] != '_')
+        obj[key] = this[key];
 
     return obj;
   }
