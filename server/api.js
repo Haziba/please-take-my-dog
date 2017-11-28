@@ -48,9 +48,9 @@ module.exports = function(app){
     app[method](url, (req, res) => {
       let authTicket = req.universalCookies.get('dog_auth');
       let [carerId, token] = authTicket.split(':');
-      
+
       Carer.load(carerId).then((carer) => {
-        if(carer.authToken != token){
+        if(carer._authToken != token){
           res.status(403);
           res.send('Forbidden');
         }
@@ -101,7 +101,7 @@ module.exports = function(app){
     let [carerId, token] = req.body.ticket.split(':');
 
     Carer.load(carerId).then((carer) => {
-      if(carer.authToken == token)
+      if(carer._authToken == token)
         apiCall.success(res, carer.forClient());
       else
         apiCall.failure(req, res, (req) => { return "Failed to authenticate ticket `" + req.body.ticket + "`" });
@@ -111,7 +111,6 @@ module.exports = function(app){
   app.post('/api/auth/login', (req, res) => {
     // untested
     Carer.loadBy({email: req.body.email}).then((carers) => {
-console.log("carers?", carers);
       let carer = carers[0];
 
       if(!carer){
@@ -121,7 +120,7 @@ console.log("carers?", carers);
 
       if(carer.LogIn(req.body.password)){
         carer.save()
-          .then(() => apiCall.success(res, carer.forClient()))
+          .then(() => apiCall.success(res, {authTicket: `${carer.uuid}:${carer._authToken}`, carer: carer.forClient()}))
           .catch((err) => apiCall.failure(req, res, (req) => { return "Failed to authenticate user `" + req.body.email + "`"}));
       } else {
         apiCall.failure(req, res, (req) => { return "Failed to authenticate user `" + req.body.email + "`" });
@@ -139,7 +138,7 @@ console.log("carers?", carers);
       let carer = Carer.new(req.body.name, req.body.email, req.body.password);
 
       carer.save()
-        .then(() => apiCall.success(res, {carer: carer.forClient()}))
+        .then(() => apiCall.success(res, {authTicket: `${carer.uuid}:${carer._authToken}`, carer: carer.forClient()}))
         .catch((err) => apiCall.failure(req, res, (req) => { "Failed to create carer `" + req.body + "`"}, err));
     });
   });

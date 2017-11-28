@@ -90,7 +90,7 @@ var Register = React.createClass({
 
 		$.post("/api/auth/register", {email: this.state.email, password: this.state.password, name: this.state.name}, function(result){
 			if(result.success){
-				window.Auth.logIn(result.data.carer);
+				window.Auth.logIn(result.data.authTicket, result.data.carer);
 				location = "/";
 			} else {
 				that.setState({ registering: false, error: result.message });

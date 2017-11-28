@@ -60,7 +60,7 @@ var Login = React.createClass({
 
 		$.post("/api/auth/login", {email: this.state.email, password: this.state.password}, (result) => {
 			if(result.success){
-				window.Auth.logIn(result.data);
+				window.Auth.logIn(result.data.authTicket, result.data.carer);
 		    this.transitionTo('/');
 			} else {
 				that.setState({ loggingIn: false, error: result.message });

@@ -68,15 +68,15 @@ const Carer = class Carer extends Entity {
   }
 
   RefreshAuthToken(){
-    let authToken = randomstring.generate(50);
+    let _authToken = randomstring.generate(50);
 
-    this.createEvent("RefreshAuthToken", {authToken});
+    this.createEvent("RefreshAuthToken", {_authToken});
 
     return true;
   }
 
   _onRefreshAuthToken(body){
-    this.authToken = body.authToken;
+    this._authToken = body._authToken;
   }
 
   Update(name, avatar){

@@ -113,8 +113,7 @@ window.Auth = (function(){
 			}
 		},
 
-		logIn: function(carer){
-			authTicket = `${carer.id}:${carer.authToken}`;
+		logIn: function(authTicket, carer){
 			$.cookie('dog_auth', authTicket, {path: '/'});
 			loggedIn = true;
 
