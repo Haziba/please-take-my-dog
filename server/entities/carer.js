@@ -44,13 +44,13 @@ const Carer = class Carer extends Entity {
       return false;
     }
 
-    this.createEvent("AddDog", {dogId});
+    this.createEvent("AddDog", {dogId, on: new Date()});
 
     return true;
   }
 
-  _onNewDog(body){
-    this.dogs.push({dogId: body.dogId, on: body.on});
+  _onAddDog(body){
+    this.dogs.push(body.dogId);
   }
 
   LogIn(password){
