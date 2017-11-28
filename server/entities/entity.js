@@ -74,68 +74,76 @@ const Entity = class Entity {
     return keys;
   }
 
-  static loadEntity(entityClass, uuid){
+  static load(uuid){
+    let entityClass = this;
+
     //todo: Handle failure
     return new Promise((success, failure) => {
-      db.get("entity", {uuid: uuid}).then((entity) => {
-        db.allFiltered("event", {uuid: uuid}).then((events) => {
-          entity.events = events;
-          success(new entityClass(entity));
-        });
+      db.get("entity", {uuid: uuid}).then((row) => {
+        entityClass.rowToEntity(row).then(success);
       });
     });
   }
 
-  static loadAll(entityClass){
+  static loadAll(){
+    let entityClass = this;
+
     return new Promise((success, failure) => {
-      db.allFiltered("entity", {entityType: entityClass.name}).then((entities) => {
-        entities = entities.filter(e => !e.deleted);
-
-        let loadEvents = [];
-        for(let entity of entities){
-          loadEvents.push(db.allFiltered("event", {uuid: entity.uuid}));
-        }
-
-        Promise.all(loadEvents).then((events) => {
-          for(let eventList of events){
-            let uuid = eventList[0].uuid;
-            entities.find(e => e.uuid == uuid).events = eventList;
-          }
-
-          success(entities.map(e => new entityClass(e)));
-        });
+      db.allFiltered("entity", {entityType: entityClass.name}).then((rows) => {
+        rows = rows.filter(e => !e.deleted);
+        entityClass.rowsToEntities(rows).then(success);
       })
     });
   }
 
-  static loadBy(entityClass, filters){
+  static loadBy(filters){
+    let entityClass = this;
+
     return new Promise((success, failure) => {
-      Entity.loadAll(entityClass).then((entities => {
-        entities = entities.map(e => new entityClass(e));
-
-        var filteredEntities = entities.filter(e => {
-          for(var key in filters){
-            if(e[key] != filters[key]){
-              return false;
+      entityClass.loadAll().then((rows => {
+        entityClass.rowsToEntities(rows).then(entities => {
+          var filteredEntities = entities.filter(e => {
+            for(var key in filters){
+              if(e[key] != filters[key]){
+                return false;
+              }
             }
-          }
-          return true;
-        });
+            return true;
+          });
 
-        success(filteredEntities);
+          success(filteredEntities);
+        });
       }));
     });
   }
 
-  static loadMany(entityClass, ids){
+  static loadMany(ids){
+    let entityClass = this;
+
     return new Promise((success, failure) => {
-      Entity.loadAll(entityClass).then((entities => {
-        entities = entities.map(e => new entityClass(e));
+      entityClass.loadAll().then((rows => {
+        entityClass.rowsToEntities(rows).then(entities => {
+          var filteredEntities = entities.filter(e => ids.indexOf(e.uuid) >= 0);
 
-        var filteredEntities = entities.filter(e => ids.indexOf(e.id) >= 0);
-
-        success(filteredEntities);
+          success(filteredEntities);
+        });
       }));
+    });
+  }
+
+  static rowsToEntities(rows){
+    let entityClass = this;
+    return Promise.all(rows.map(row => entityClass.rowToEntity(row)));
+  }
+
+  static rowToEntity(row){
+    let entityClass = Entity._classes[this.name];
+
+    return new Promise((success, failure) => {
+      db.allFiltered("event", {uuid: row.uuid}).then(events => {
+        row.events = events;
+        success(new entityClass(row));
+      });
     });
   }
 
@@ -151,5 +159,7 @@ const Entity = class Entity {
     });
   }
 }
+
+Entity._classes = {};
 
 module.exports = Entity;

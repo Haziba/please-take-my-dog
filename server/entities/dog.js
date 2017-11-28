@@ -1,6 +1,6 @@
 const Entity = require('./entity.js');
 
-module.exports = class Dog extends Entity {
+const Dog = class Dog extends Entity {
   constructor(props = {}){
     super(props);
 
@@ -75,16 +75,8 @@ module.exports = class Dog extends Entity {
 
     return dog;
   }
+};
 
-  static load(uuid){
-    return Entity.loadEntity(Dog, uuid);
-  }
+Entity._classes['Dog'] = Dog;
 
-  static loadAll(){
-    return Entity.loadAll(Dog);
-  }
-
-  static loadMany(ids){
-    return Entity.loadMany(Dog, ids);
-  }
-}
+module.exports = Dog;

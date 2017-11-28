@@ -3,7 +3,7 @@ const Entity = require('./entity.js');
 const passwordHash = require('password-hash');
 const randomstring = require('randomstring');
 
-module.exports = class Carer extends Entity {
+const Carer = class Carer extends Entity {
   constructor(props = {}){
     super(props);
 
@@ -112,16 +112,8 @@ module.exports = class Carer extends Entity {
 
     return carer;
   }
-
-  static load(uuid){
-    return Entity.loadEntity(Carer, uuid);
-  }
-
-  static loadAll(){
-    return Entity.loadAll(Carer);
-  }
-
-  static loadBy(filter){
-    return Entity.loadBy(Carer, filter);
-  }
 }
+
+Entity._classes['Carer'] = Carer;
+
+module.exports = Carer;
