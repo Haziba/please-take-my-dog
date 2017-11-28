@@ -15,7 +15,7 @@ module.exports = class Carer extends Entity {
     this.avatar = data.avatar;
     this.dogs = data.dogs || [];
 
-    this.commitEvents();
+    this.applyEvents();
   }
 
   Create(name, email, password){

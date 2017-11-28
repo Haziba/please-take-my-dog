@@ -17,7 +17,7 @@ module.exports = class Dog extends Entity {
     this.transfercarerid = data.transfercarerid;
     this.carerhistory = data.carerhistory || [];
 
-    this.commitEvents();
+    this.applyEvents();
   }
 
   Create(carerId, name, breed, size, images){

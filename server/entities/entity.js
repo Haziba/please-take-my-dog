@@ -2,7 +2,7 @@ const eventBus = require('./eventBus.js');
 const db = require('../db.js');
 const uuid = require('uuid/v1');
 
-module.exports = class Entity {
+const Entity = class Entity {
   constructor(props = {}){
     this.uuid = props.uuid || uuid();
     this.events = props.events || [];
@@ -17,10 +17,19 @@ module.exports = class Entity {
     this.events.push(event);
   }
 
+  applyEvents(){
+    for(let i = this.totalEventsApplied; i < this.events.length; i++){
+      this.applyEvent(this.events[i]);
+      this.totalEventsApplied++;
+    }
+  }
+
   commitEvents(){
     for(let i = this.totalEventsApplied; i < this.events.length; i++){
       this.applyEvent(this.events[i]);
       this.totalEventsApplied++;
+
+      eventBus.pub(this.entityClass.name, this, this.events[i].type, this.events[i].body);
     }
   }
 
@@ -142,3 +151,5 @@ module.exports = class Entity {
     });
   }
 }
+
+module.exports = Entity;
