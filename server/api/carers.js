@@ -6,16 +6,17 @@ const Dog = require('../entities/dog.js');
 
 module.exports = function(app, respond, apiCall, authCheck){
   app.get('/api/carer/:carerId', (req, res) => {
-    let carer = Carer.promiseForClient(Carer.load(req.params.carerId));
-    let dogs = Dog.promiseForClient(Dog.loadMany(carer.dogs));
-
-    all({
-      carer,
-      dogs,
-      transfers: [],
-      requests: [],
-      requestCarers: {}
-    }).then((results) => apiCall.success(res, results));
+    Carer.promiseForClient(Carer.load(req.params.carerId)).then((carer) => {
+      Dog.promiseForClient(Dog.loadMany(carer.dogs)).then((dogs) => {
+        all({
+          carer,
+          dogs,
+          transfers: [],
+          requests: [],
+          requestCarers: {}
+        }).then((results) => apiCall.success(res, results));
+      });
+    });
   });
 
   respond('put', '/api/carer/:carerId', (req, carer, callback) => {
