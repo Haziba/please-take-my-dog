@@ -29,7 +29,7 @@ const Entity = class Entity {
       this.applyEvent(this.events[i]);
       this.totalEventsApplied++;
 
-      eventBus.pub(this.entityClass.name, this, this.events[i].type, this.events[i].body);
+      eventBus.pub(this.constructor.name, this, this.events[i].type, this.events[i].body);
     }
   }
 
