@@ -4,6 +4,8 @@ const db = require('./db.js');
 const Dog = require('./entities/dog.js');
 const Carer = require('./entities/carer.js');
 
+require('./entities/eventListeners');
+
 module.exports = function(app){
   var apiCall = {
     db: (req, res, dbActions, failureMessage) => {
