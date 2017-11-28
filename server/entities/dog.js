@@ -41,7 +41,7 @@ module.exports = class Dog extends Entity {
 
   _onNewCarer(body){
     this.carerid = body.carerId;
-    this.carerHistory.push({carerId: body.carerId, on: body.on});
+    this.carerhistory.push({carerId: body.carerId, on: body.on});
   }
 
   Update(name, breed, size, images){

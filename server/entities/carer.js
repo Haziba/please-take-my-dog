@@ -24,9 +24,7 @@ module.exports = class Carer extends Entity {
       return false;
     }
 
-    console.log("create pass", typeof(password), password);
     password = passwordHash.generate(password);
-    console.log(password);
 
     this.createEvent("Create", {name, email, password});
 

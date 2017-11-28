@@ -33,7 +33,7 @@ module.exports = function(app, respond, apiCall, authCheck){
   });
 
   respond('post', '/api/dogs/add', (req, carer, callback) => {
-    callback(authCheck.loggedIn(carer) && req.body.carerid == carer.id)
+    callback(authCheck.loggedInAs(carer, req.body.carerid));
   }, (req, res) => {
     var dog = Dog.new(req.body.carerid, req.body.name, req.body.breed, req.body.size, req.body.images);
 
