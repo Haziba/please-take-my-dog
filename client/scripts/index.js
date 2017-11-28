@@ -105,7 +105,7 @@ window.Auth = (function(){
 
 					callback({ authed: result.success, carer: result.data });
 				}).catch((err) => {
-					//$.cookie('dog_auth', '');
+					$.removeCookie('dog_auth', {path: '/'});
 					callback({ authed: false, carer: undefined });
 				});
 			} else {
