@@ -1,4 +1,4 @@
-const Carer = require('../../../src/server/entities/carer.js');
+const Carer = require('../../../../src/server/entities/carer.js');
 
 const assert = require('assert');
 const passwordHash = require('password-hash');
@@ -19,31 +19,31 @@ describe('carer', function() {
       });
 
       it('should have two events', () => {
-        assert.equal(carer.events.length, 2);
+        assert.equal(carer._events.length, 2);
       });
 
       it('should create a Create event first', () => {
-        assert.equal(carer.events[0].type, 'Create');
+        assert.equal(carer._events[0].type, 'Create');
       });
 
       it('should hold the name', () => {
-        assert.equal(carer.events[0].body.name, name);
+        assert.equal(carer._events[0].body.name, name);
       });
 
       it('should hold the email', () => {
-        assert.equal(carer.events[0].body.email, email);
+        assert.equal(carer._events[0].body.email, email);
       });
 
       it('should hold the hashed password', () => {
-        assert.equal(passwordHash.verify(password, carer.events[0].body.password), true);
+        assert.equal(passwordHash.verify(password, carer._events[0].body.password), true);
       });
 
       it('should create a RefreshAuthToken event second', () => {
-        assert.equal(carer.events[1].type, 'RefreshAuthToken');
+        assert.equal(carer._events[1].type, 'RefreshAuthToken');
       });
 
       it('should hold the auth token', () => {
-        assert.notEqual(carer.events[1].body._authToken, undefined);
+        assert.notEqual(carer._events[1].body._authToken, undefined);
       });
     });
 
@@ -61,7 +61,7 @@ describe('carer', function() {
       });
 
       it('should not create any events', () => {
-        assert.equal(carer.events.length, 0);
+        assert.equal(carer._events.length, 0);
       });
     });
 
@@ -79,7 +79,7 @@ describe('carer', function() {
       });
 
       it('should not create any events', () => {
-        assert.equal(carer.events.length, 0);
+        assert.equal(carer._events.length, 0);
       });
     });
 
@@ -97,7 +97,7 @@ describe('carer', function() {
       });
 
       it('should not create any events', () => {
-        assert.equal(carer.events.length, 0);
+        assert.equal(carer._events.length, 0);
       });
     });
   });

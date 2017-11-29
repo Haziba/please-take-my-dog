@@ -1,4 +1,4 @@
-const Carer = require('../../../src/server/entities/carer.js');
+const Carer = require('../../../../src/server/entities/carer.js');
 
 const assert = require('assert');
 

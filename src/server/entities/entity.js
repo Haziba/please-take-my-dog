@@ -5,8 +5,8 @@ const uuid = require('uuid/v1');
 const Entity = class Entity {
   constructor(props = {}){
     this.uuid = props.uuid || uuid();
-    this.events = props.events || [];
-    this.totalEventsApplied = props.totaleventsapplied || 0;
+    this._events = props.events || [];
+    this._totalEventsApplied = props.totaleventsapplied || 0;
   }
 
   createEvent(type, body){
@@ -14,22 +14,22 @@ const Entity = class Entity {
 
     db.insert("event", event);
 
-    this.events.push(event);
+    this._events.push(event);
   }
 
   applyEvents(){
-    for(let i = this.totalEventsApplied; i < this.events.length; i++){
-      this.applyEvent(this.events[i]);
-      this.totalEventsApplied++;
+    for(let i = this._totalEventsApplied; i < this._events.length; i++){
+      this.applyEvent(this._events[i]);
+      this._totalEventsApplied++;
     }
   }
 
   commitEvents(){
-    for(let i = this.totalEventsApplied; i < this.events.length; i++){
-      this.applyEvent(this.events[i]);
-      this.totalEventsApplied++;
+    for(let i = this._totalEventsApplied; i < this._events.length; i++){
+      this.applyEvent(this._events[i]);
+      this._totalEventsApplied++;
 
-      eventBus.pub(this.constructor.name, this, this.events[i].type, this.events[i].body);
+      eventBus.pub(this.constructor.name, this, this._events[i].type, this._events[i].body);
     }
   }
 
@@ -43,7 +43,7 @@ const Entity = class Entity {
     this.commitEvents();
 
     saveable.uuid = this.uuid;
-    saveable.totalEventsApplied = this.totalEventsApplied;
+    saveable._totalEventsApplied = this._totalEventsApplied;
     saveable.entityType = this.constructor.name;
 
     saveable.data = {};
