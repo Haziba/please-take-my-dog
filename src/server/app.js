@@ -14,19 +14,19 @@ module.exports = function(bus, db){
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  nunjucks.configure('server/templates/views', {
+  nunjucks.configure('./src/server/templates/views', {
       express: app
   });
 
-  app.use(less('public'));
-  app.use(express.static('public'));
+  app.use(less('./src/public'));
+  app.use(express.static('./src/public'));
 
   app.get('/js/' + config.common.bundle, browserify(config.common.packages, {
   	cache: true,
   	precompile: true
   }));
 
-  app.use('/js', browserify('./client/scripts', {
+  app.use('/js', browserify('./src/client/scripts', {
   	external: config.common.packages,
   	transform: [babelify.configure({
   		plugins: ['object-assign']

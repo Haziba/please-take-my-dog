@@ -29,7 +29,7 @@
     "uuid": "^3.1.0"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node src/server.js",
     "test": "echo \"no tests yet\" && exit 0"
   }
 }
