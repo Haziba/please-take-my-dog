@@ -30,6 +30,9 @@
   },
   "scripts": {
     "start": "node src/server.js",
-    "test": "echo \"no tests yet\" && exit 0"
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^4.0.1"
   }
 }
