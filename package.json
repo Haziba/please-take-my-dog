@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "node src/server.js",
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "devDependencies": {
     "mocha": "^4.0.1"
