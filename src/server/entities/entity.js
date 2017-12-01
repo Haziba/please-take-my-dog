@@ -43,7 +43,7 @@ const Entity = class Entity {
     this.commitEvents();
 
     saveable.uuid = this.uuid;
-    saveable._totalEventsApplied = this._totalEventsApplied;
+    saveable.totalEventsApplied = this._totalEventsApplied;
     saveable.entityType = this.constructor.name;
 
     saveable.data = {};
