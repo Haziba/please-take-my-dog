@@ -24,9 +24,9 @@ const Carer = class Carer extends Entity {
       return false;
     }
 
-    password = passwordHash.generate(password);
+    const _password = passwordHash.generate(password);
 
-    this.createEvent("Create", {name, email, password});
+    this.createEvent("Create", {name, email, _password});
 
     this.RefreshAuthToken();
 
@@ -54,7 +54,7 @@ const Carer = class Carer extends Entity {
   }
 
   LogIn(password){
-    if(!passwordHash.verify(password, this.password))
+    if(!passwordHash.verify(password, this._password))
       return false;
 
     this.createEvent("LogIn");

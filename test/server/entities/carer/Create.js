@@ -36,7 +36,7 @@ describe('carer', function() {
       });
 
       it('should hold the hashed password', () => {
-        assert.equal(passwordHash.verify(password, carer._events[0].body.password), true);
+        assert.equal(passwordHash.verify(password, carer._events[0].body._password), true);
       });
 
       it('should create a RefreshAuthToken event second', () => {
