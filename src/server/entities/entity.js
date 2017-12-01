@@ -1,5 +1,6 @@
 const eventBus = require('./eventBus.js');
 const db = require('../db.js');
+console.log(db);
 const uuid = require('uuid/v1');
 
 const Entity = class Entity {
@@ -73,6 +74,10 @@ const Entity = class Entity {
       keys.push(key);
     }
     return keys;
+  }
+
+  unappliedEvents(){
+    return this._events.splice(this._totalEventsApplied);
   }
 
   static load(uuid){
