@@ -95,14 +95,13 @@ const Carer = class Carer extends Entity {
   }
 
   Delete(){
-    this.createEvent("Delete", {on: new Date()});
+    this.createEvent("Delete");
 
     return true;
   }
 
   _onDelete(body){
     this.deleted = true;
-    this.deletedOn = body.on;
   }
 
   static new(name, email, password){
