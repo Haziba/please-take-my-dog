@@ -27,7 +27,7 @@ const Dog = class Dog extends Entity {
     }
 
     this.createEvent("Create", {name: name, breed: breed, size: size, images: images});
-    this.createEvent("NewCarer", {carerId: carerId, on: new Date()});
+    this.createEvent("NewCarer", {carerId: carerId});
 
     return true;
   }
