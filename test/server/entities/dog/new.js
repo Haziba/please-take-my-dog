@@ -1,5 +1,5 @@
 
-require('../../../mock.js');
+const DB = require('../../../mock/db.js');
 const Dog = require('../../../../src/server/entities/dog.js');
 
 const assert = require('assert');

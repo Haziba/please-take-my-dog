@@ -1,9 +1,13 @@
 const mock = require('mock-require');
 
-mock('../src/server/db.js', {
+const db = {
   upsertEntity: function(){
   },
 
   insert: function(){
-  }
-});
+  },
+};
+
+mock('../../src/server/db.js', db);
+
+module.exports = db;
