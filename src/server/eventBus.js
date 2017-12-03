@@ -1,4 +1,3 @@
-//todo: Build event bus
 module.exports = {
   sub: (entityType, event, callback) => {
     if(!this._subs)

@@ -1,4 +1,4 @@
-const eventBus = require('../../eventBus.js');
+const eventBus = require('../../../eventBus.js');
 
 const Dog = require('../../dog.js');
 const Carer = require('../../carer.js');

@@ -1,4 +1,4 @@
-const eventBus = require('./eventBus.js');
+const eventBus = require('../eventBus.js');
 const db = require('../db.js');
 console.log(db);
 const uuid = require('uuid/v1');
