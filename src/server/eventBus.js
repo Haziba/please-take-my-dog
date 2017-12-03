@@ -1,12 +1,12 @@
 const eventBus = {
   sub: (entityType, event, callback) => {
-    if(!this._subs)
-      this._subs = {};
-    if(!this._subs[entityType])
-      this._subs[entityType] = {};
-    if(!this._subs[entityType][event])
-      this._subs[entityType][event] = [];
-    this._subs[entityType][event].push(callback);
+    if(!eventBus._subs)
+      eventBus._subs = {};
+    if(!eventBus._subs[entityType])
+      eventBus._subs[entityType] = {};
+    if(!eventBus._subs[entityType][event])
+      eventBus._subs[entityType][event] = [];
+    eventBus._subs[entityType][event].push(callback);
   },
 
   pub: (entityType, entity, event, data) => {
@@ -15,6 +15,10 @@ const eventBus = {
         sub(entity, data);
       }
     }
+  },
+
+  reset: () => {
+    eventBus._subs = {};
   }
 };
 
