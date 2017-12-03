@@ -45,6 +45,10 @@ const Dog = class Dog extends Entity {
   }
 
   Update(name, breed, size, images){
+    if(!name || !breed || !size){
+      return false;
+    }
+
     this.createEvent("Update", {name: name, breed: breed, size: size, images: images});
 
     return true;
