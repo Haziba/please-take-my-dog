@@ -62,14 +62,13 @@ const Dog = class Dog extends Entity {
   }
 
   Delete(){
-    this.createEvent("Delete", {on: new Date()});
+    this.createEvent("Delete");
 
     return true;
   }
 
   _onDelete(body){
     this.deleted = true;
-    this.deletedOn = body.on;
   }
 
   static new(carerId, name, breed, size, images){

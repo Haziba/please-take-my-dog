@@ -7,9 +7,11 @@ describe('Dog', function() {
     const dog = new Dog();
 
     const carerId = 15;
+    const on = Date.now();
 
     dog.createEvent('NewCarer', {
-      carerId
+      carerId,
+      on
     });
 
     dog.applyEvents();
@@ -17,5 +19,9 @@ describe('Dog', function() {
     it('should set the carerid', () => {
       assert.equal(dog.carerid, carerId);
     });
+
+    it('should add the carer to the carerHistory', () => {
+      assert.deepEqual(dog.carerhistory, [{carerId: carerId, on: on}]);
+    })
   });
 });
