@@ -4,7 +4,7 @@ const db = require('./db.js');
 const Dog = require('./entities/dog.js');
 const Carer = require('./entities/carer.js');
 
-require('./entities/eventListeners');
+require('./eventListeners');
 
 module.exports = function(app){
   var apiCall = {
