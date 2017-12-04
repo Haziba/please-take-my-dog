@@ -221,7 +221,7 @@ var DB = {
 
 	upsertEntity: (saveableEntity) => {
 		return new Promise((success, failure) => {
-			client.query("insert into entity(uuid, entitytype, data, totaleventsapplied) VALUES($1, $2, $3, $4) ON CONFLICT (uuid) DO UPDATE SET data=$3, totaleventsapplied=$4", [saveableEntity.uuid, saveableEntity.entityType, saveableEntity.data, saveableEntity.totalEventsApplied])
+			client.query("insert into entity(uuid, entitytype, data, totaleventsapplied) VALUES($1, $2, $3, $4) ON CONFLICT (uuid) DO UPDATE SET data=$3, totaleventsapplied=$4", [saveableEntity.uuid, saveableEntity.entitytype, saveableEntity.data, saveableEntity.totaleventsapplied])
 				.then((data) => success(data)).catch((err) => {
 					console.log("Failed to upsert entity " + saveableEntity, err);
 					failure("Insert failed");
