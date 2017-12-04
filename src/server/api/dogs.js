@@ -1,12 +1,22 @@
 const db = require('../db.js');
 const Dog = require('../entities/dog.js');
+const Carer = require('../entities/carer.js');
 
 module.exports = function(app, respond, apiCall, authCheck){
   app.get('/api/dogs', (req, res) => apiCall.db(req, res, {dogs: Dog.promiseForClient(Dog.loadAll())}, (req) => { "Failed to get dogs" }));
 
   app.get('/api/dogs/quicklist', (req, res) => apiCall.db(req, res, {all: Dog.promiseForClient(Dog.loadAll())}, (req) => { "Failed to get quicklist dogs" }));
 
-  app.get('/api/dog/:dogId', (req, res) => apiCall.db(req, res, {dog: Dog.promiseForClient(Dog.load(req.params.dogId)), carer: db.getByChild("carer", "dog", req.params.dogId)}, (req) => { "Failed to get dog `" + req.params.dogId + "`" }));
+  respond('get', '/api/dog/:dogId', undefined, (req, res) => {
+    Dog.load(req.params.dogId).then((dog) => {
+      Carer.load(dog.carerid).then((carer) => {
+        apiCall.success(res, {
+          dog: dog.forClient(),
+          carer: carer.forClient()
+        });
+      });
+    })
+  });
 
   respond('put', '/api/dog/:dogId', (req, carer, callback) => {
     authCheck.isDogOwner(carer, req.params.dogId).then(callback);
