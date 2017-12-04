@@ -46,11 +46,20 @@ module.exports = function(app){
 
   let respond = function(method, url, auth, response){
     app[method](url, (req, res) => {
+      if(!auth){
+        response(req, res);
+        return;
+      }
+
       let authTicket = req.universalCookies.get('dog_auth');
+      if(!authTicket){
+        res.status(403);
+        res.send('Forbidden');
+      }
       let [carerId, token] = authTicket.split(':');
 
       Carer.load(carerId).then((carer) => {
-        if(carer._authToken != token){
+        if(authTicket && auth && carer._authToken != token){
           res.status(403);
           res.send('Forbidden');
         }
