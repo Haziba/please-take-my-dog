@@ -1,6 +1,5 @@
 const eventBus = require('../eventBus.js');
 const db = require('../db.js');
-console.log(db);
 const uuid = require('uuid/v1');
 
 const Entity = class Entity {
@@ -44,8 +43,8 @@ const Entity = class Entity {
     this.commitEvents();
 
     saveable.uuid = this.uuid;
-    saveable.totalEventsApplied = this._totalEventsApplied;
-    saveable.entityType = this.constructor.name;
+    saveable.totaleventsapplied = this._totalEventsApplied;
+    saveable.entitytype = this.constructor.name;
 
     saveable.data = {};
 
@@ -68,7 +67,7 @@ const Entity = class Entity {
   dataKeys(){
     let keys = [];
     for(let key in this){
-      if(key == "uuid" || key == "totalEventsApplied" || key == "events"){
+      if(key == "uuid" || key == "_totalEventsApplied" || key == "_events"){
         continue;
       }
       keys.push(key);

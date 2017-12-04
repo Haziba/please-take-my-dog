@@ -44,7 +44,7 @@ const Carer = class Carer extends Entity {
       return false;
     }
 
-    this.createEvent("AddDog", {dogId, on: new Date()});
+    this.createEvent("AddDog", {dogId});
 
     return true;
   }

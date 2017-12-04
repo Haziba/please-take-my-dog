@@ -10,11 +10,13 @@ const eventBus = {
   },
 
   pub: (entityType, entity, event, data) => {
+    const subs = [];
     if(eventBus._subs && eventBus._subs[entityType] && eventBus._subs[entityType][event]){
       for(let sub of eventBus._subs[entityType][event]){
-        sub(entity, data);
+        subs.push(sub(entity, data));
       }
     }
+    return Promise.all(subs);
   },
 
   reset: () => {
